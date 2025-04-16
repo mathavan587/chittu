@@ -74,29 +74,34 @@
             <!-- Add New Form -->
             <div>
             <h3 class="text-gray-700 font-semibold mb-2">🛒 Add new</h3>
-            <form class="space-y-4">
-                <div>
-                <label class="block text-sm font-medium text-gray-600">Category</label>
-                <select class="w-full border rounded px-3 py-2">
+                <form class="space-y-4">
+                    <div>
+                    <label class="block text-sm font-medium text-gray-600">Category</label>
+                    <select name="category" class="w-full border rounded px-3 py-2">
                     <option>Choose a category</option>
-                </select>
-                </div>
-                <div>
-                <label class="block text-sm font-medium text-gray-600">Order Service</label>
-                <select class="w-full border rounded px-3 py-2">
-                    <option>Choose a service</option>
-                </select>
-                </div>
-                <div>
-                <label class="block text-sm font-medium text-gray-600">Link</label>
-                <input type="url" placeholder="https://" class="w-full border rounded px-3 py-2" />
-                </div>
-                <div>
-                <label class="block text-sm font-medium text-gray-600">Quantity</label>
-                <input type="number" class="w-full border rounded px-3 py-2" />
-                </div>
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded shadow">Place Order</button>
-            </form>
+                    <?php
+                    foreach($categories as $s){
+                    ?>
+                    <option value="<?=$s->id?>" ><?=$s->categories?></option>
+                    <?php } ?>
+                    </select>
+                    </div>
+                    <div>
+                    <label class="block text-sm font-medium text-gray-600">Order Service</label>
+                    <select name="service" class="w-full border rounded px-3 py-2">
+                        <option>Choose a service</option>
+                    </select>
+                    </div>
+                    <div>
+                    <label class="block text-sm font-medium text-gray-600">Link</label>
+                    <input type="url" placeholder="https://" class="w-full border rounded px-3 py-2" />
+                    </div>
+                    <div>
+                    <label class="block text-sm font-medium text-gray-600">Quantity</label>
+                    <input type="number" class="w-full border rounded px-3 py-2" />
+                    </div>
+                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded shadow">Place Order</button>
+                </form>
             </div>
 
             <!-- Order Resume -->
@@ -105,25 +110,25 @@
             <div class="space-y-4">
                 <div>
                 <label class="block text-sm font-medium text-gray-600">Service Name</label>
-                <input type="text" class="w-full border rounded px-3 py-2" readonly />
+                <input type="text" id="resume-service-name" class="w-full border rounded px-3 py-2" readonly />
                 </div>
                 <div class="grid grid-cols-3 gap-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Minimum</label>
-                    <input type="text" class="w-full border rounded px-3 py-2" readonly />
+                    <input type="text" id="resume-min"  class="w-full border rounded px-3 py-2" readonly />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Maximum</label>
-                    <input type="text" class="w-full border rounded px-3 py-2" readonly />
+                    <input type="text" id="resume-max" class="w-full border rounded px-3 py-2" readonly />
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-600">Price/1k</label>
-                    <input type="text" class="w-full border rounded px-3 py-2" readonly />
+                    <input type="text" id="resume-price" class="w-full border rounded px-3 py-2" readonly />
                 </div>
                 </div>
                 <div>
                 <label class="block text-sm font-medium text-gray-600">Description</label>
-                <textarea class="w-full border rounded px-3 py-2" rows="4" readonly></textarea>
+                <textarea id="resume-desc" class="w-full border rounded px-3 py-2" rows="4" readonly></textarea>
                 </div>
             </div>
             </div>
@@ -184,3 +189,77 @@
 
     </body>
     </html>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('select[name="category"]').on('change', function() {
+        var catId = $(this).val();
+
+        $.ajax({
+            url: '<?= base_url('user/getServicesByCategory') ?>',
+            type: 'GET',
+            data: { category_id: catId },
+            dataType: 'json',
+            success: function(data) {
+              // console.log(data);  
+                var $serviceSelect = $('select[name="service"]');
+                $serviceSelect.empty().append('<option>Choose a service</option>');
+
+                $.each(data, function(index, service) {
+                    $serviceSelect.append(
+                        $('<option>', {
+                            value: service.id,
+                            text: service.name
+                        })
+                    );
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+            }
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    $('select[name="service"]').on('change', function() {
+        var catId = $(this).val();
+
+        $.ajax({
+            url: '<?= base_url('user/getServicesByservice') ?>',
+            type: 'GET',
+            data: { category_id: catId },
+            dataType: 'json',
+            success: function(data) {
+              // console.log(data);  
+
+              $('#resume-service-name').val(data.name);        // or data.service_name based on DB
+            $('#resume-min').val(data.min);
+            $('#resume-max').val(data.max);
+            $('#resume-price').val(data.rate);
+            $('#resume-desc').val(data.desc);
+              
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+            }
+        });
+    });
+
+
+});
+</script>
+
