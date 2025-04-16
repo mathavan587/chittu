@@ -163,36 +163,36 @@
               <img src="/api/placeholder/80/80" alt="Dashboard Icon" class="w-20 h-20">
             </div>
             <h3 class="text-gray-800 text-xl font-semibold mb-4 text-center">Create Your Account</h3>
-       <form id="userform" class="space-y-6">
-  <div>
-    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-    <input type="text" name="name" id="name" placeholder="Your full name"
-      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-  </div>
+        <form id="userform" class="space-y-6">
+    <div>
+      <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+      <input type="text" name="name" id="name" placeholder="Your full name"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
 
-  <div>
-    <label for="mobile" class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
-    <input type="text" name="mobile" id="mobile" placeholder="9876543210"
-      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-  </div>
+    <div>
+      <label for="mobile" class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+      <input type="text" name="mobile" id="mobile" placeholder="9876543210"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
 
-  <div>
-    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-    <input type="email" name="email" id="email" placeholder="you@example.com"
-      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-  </div>
+    <div>
+      <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+      <input type="email" name="email" id="email" placeholder="you@example.com"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
 
-  <div>
-    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
-    <input type="password" name="password" id="password" placeholder="••••••••"
-      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
-  </div>
+    <div>
+      <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+      <input type="password" name="password" id="password" placeholder="••••••••"
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+    </div>
 
-  <button type="submit"
-    class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition font-medium">
-    Submit
-  </button>
-</form>
+    <button type="submit"
+      class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition font-medium">
+      Submit
+    </button>
+  </form>
 
 
             <p class="text-gray-500 text-xs text-center mt-4">By signing up, you agree to our Terms of Service and Privacy Policy</p>

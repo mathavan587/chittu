@@ -53,4 +53,16 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['register'] = 'welcome/register';
+$route['signup'] = 'welcome/signup';
+$route['verification'] = 'welcome/verification';
+$route['verify'] = 'welcome/verify';
+$route['login'] = 'welcome/login';
 
+//auth controller
+$route['auth'] = 'auth/login';
+
+//user conntroller
+$route['user'] = 'User';
+
+//import api
+$route['importServices'] = 'SmmController/importServices';

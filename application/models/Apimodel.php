@@ -8,7 +8,9 @@ class Apimodel extends CI_Model
     {
         parent::__construct();
 
-        $this->db->db_select(DATABASE_NAME);
+          
+        $this->db->db_select(DATABASE_NAME); // ✅ safer
+
     }
 
     public $tablename = "";
@@ -203,16 +205,12 @@ public function getMultipleDataJoin2($joins, $select, $condition) {
 
     public function insertData($data)
     {
+        // log_message('debug',json_encode($data));
         $this->db->insert($this->tablename, $data);
         $insert_id = $this->db->insert_id();
         return  $insert_id;
     }
-    public function insertData1($data)
-    {
-        $this->db->insert($this->tablename, $data);
-        $insert_id = $this->db->insert_id();
-        return  true;
-    }
+   
     public function deleteData($data)
     {
         $this->db->delete($this->tablename, $data);
@@ -289,45 +287,7 @@ public function getMultipleDataJoin2($joins, $select, $condition) {
         }
     }
     
-    public function addUser($data)
-{
-    // First, check if email already exists
-    $existingUser = $this->db
-        ->select('id')
-        ->from($this->tablename)
-        ->where('email', $data['email'])
-        ->get()
-        ->row();
-
-    if ($existingUser) {
-        return [
-            'status' => false,
-            'message' => 'Email already exists.'
-        ];
-    }
-
-    // Hash the password using MD5
-    if (isset($data['password'])) {
-        $data['password'] = md5($data['password']);
-    }
-
-    // Set default values
-    $data['status'] = true;
-    $data['delete'] = false;
-
-    // Timestamps
-    $data['created_at'] = date('Y-m-d H:i:s');
-    $data['modified_at'] = date('Y-m-d H:i:s');
-
-    // Insert the data
-    $this->db->insert($this->tablename, $data);
-
-    return [
-        'status' => true,
-        'insert_id' => $this->db->insert_id(),
-        'message' => 'User added successfully.'
-    ];
-}
+ 
 
 
 }
