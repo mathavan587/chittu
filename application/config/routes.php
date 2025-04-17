@@ -67,3 +67,5 @@ $route['user'] = 'User';
 //import api
 $route['importServices'] = 'SmmController/importServices';
 // $route['getServicesByCategory'] = 'user/getServicesByCategory';
+
+$route['importServices_view'] = 'SmmController/importServices_view';

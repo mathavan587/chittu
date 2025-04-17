@@ -104,58 +104,74 @@ class SmmController extends CI_Controller
         }
         $grouped = [];
     $i=0;
-        foreach ($services as $service) {
-            $i++;
-            $category = $service['category'];
-            $grouped[$category][] = $service;
-            $apimodel = new Apimodel();
-            $apimodel->tablename = 'services';
-            $data = [
-                                'service_id' => $service['service'],
-                                'name'       => $service['name'],
-                                'category'   => $service['category'],
-                                'rate'       => $service['rate'],
-                                'min'        => $service['min'],
-                                'max'        => $service['max'],
-                                'type'       => $service['type'],
-                                'desc'       => $service['desc'] ?? null
-            ];
-                              
-            $result=$apimodel->insertData($data);
+            //    $r=array($services); 
+
+
+            foreach ($services as $service) {
+                $i++;
+                $category = $service['category'];
+                $grouped[$category][] = $service;
+                $apimodel = new Apimodel();
+                $apimodel->tablename = 'services';
+                $data = [
+                                    'service_id' => $service['service'],
+                                    'name'       => $service['name'],
+                                    'category'   => $service['category'],
+                                    'rate'       => $service['rate'],
+                                    'min'        => $service['min'],
+                                    'max'        => $service['max'],
+                                    'type'       => $service['type'],
+                                    'desc'       => $service['desc'] ?? null
+                ];
+                // var_dump($data);                                                                                
+                                
+                $result=$apimodel->insertData($data);
+                
+            }
+
+        $categories = array_keys($grouped);
+
+                print_r($categories);
             
+                foreach ($categories as $category) {
+                    $data = [
+                        'categories' => $category
+                    ];
+                    $apimodel = new Apimodel();
+                    $apimodel->tablename = 'categories';
+                    $result=$apimodel->insertData($data);
+                    $getid=array('id'=>$result);
+                    $getdata=$apimodel->getSingleData($getid);
+                    $apimodel->tablename = 'services';
+                    $updateda=array(
+                        'category'=>$getdata->categories
+                    );
+                    $updateda1=array(
+                        'category'=>$result
+                    );
+                    $apimodel->updateData($updateda,$updateda1);
+    }
+
+            
+
+
+                                //    log_message('debug',json_encode($result));
+
+        $result=$apimodel->insertData($data);
+//  echo $result;
+
+
         }
 
-    $categories = array_keys($grouped);
-            // print_r($categories);
-        
-            foreach ($categories as $category) {
-                $data = [
-                    'categories' => $category
-                ];
-                $apimodel = new Apimodel();
-                $apimodel->tablename = 'categories';
-                $result=$apimodel->insertData($data);
-                  $getid=array('id'=>$result);
-                 $getdata=$apimodel->getSingleData($getid);
-                $apimodel->tablename = 'services';
-                $updateda=array(
-                    'category'=>$getdata->categories
-                   );
-                   $updateda1=array(
-                    'category'=>$result
-                   );
-                 $apimodel->updateData($updateda,$updateda1);
-}
-
-        
+        public function importServices_view()
+        {
 
 
-                            //    log_message('debug',json_encode($result));
-
-    $result=$apimodel->insertData($data);
-
-
-
+            $data=array(
+                'title'=>'verification eamil id',
+                'carde_title'=>'Account verify'
+            );
+            $this->load->view('importServices_view',$data);
         }
       
     
