@@ -70,8 +70,8 @@ class SmmController extends CI_Controller
     // }
     public function importServices()
     {
-        $api_url = 'https://smmpur.in/api/v2';
-        $api_key = 'f383d221ddb88e8dbfd0419647a89ef6b14a7619';
+        $api_url = 'https://www.cheapsmmhub.com/api/v2';
+        $api_key = '4c514bc5d240393a9f4f357d132aea17ce59937c';
     
         $post_fields = [    
             'key'    => $api_key,
@@ -113,11 +113,15 @@ class SmmController extends CI_Controller
                 $grouped[$category][] = $service;
                 $apimodel = new Apimodel();
                 $apimodel->tablename = 'services';
+                $per=20;
+               $set=($service['rate']*$per)/100;
+               $set_rate=$service['rate']+$set;
                 $data = [
                                     'service_id' => $service['service'],
                                     'name'       => $service['name'],
                                     'category'   => $service['category'],
                                     'rate'       => $service['rate'],
+                                    'set_rate'       => $set_rate,
                                     'min'        => $service['min'],
                                     'max'        => $service['max'],
                                     'type'       => $service['type'],
@@ -135,7 +139,8 @@ class SmmController extends CI_Controller
             
                 foreach ($categories as $category) {
                     $data = [
-                        'categories' => $category
+                        'categories' => $category,
+                        'percentage' => '10'
                     ];
                     $apimodel = new Apimodel();
                     $apimodel->tablename = 'categories';

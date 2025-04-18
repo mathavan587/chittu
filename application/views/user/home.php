@@ -6,7 +6,9 @@
     <title>Chittu SMM Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-    </head>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  
+  </head>
     <body class="bg-gray-50 font-sans">
 
     <!-- Header -->
@@ -74,7 +76,7 @@
             <!-- Add New Form -->
             <div>
             <h3 class="text-gray-700 font-semibold mb-2">🛒 Add new</h3>
-                <form class="space-y-4">
+                <form class="space-y-4" id="orderForm" method="post">
                     <div>
                     <label class="block text-sm font-medium text-gray-600">Category</label>
                     <select name="category" class="w-full border rounded px-3 py-2">
@@ -98,7 +100,17 @@
                     </div>
                     <div>
                     <label class="block text-sm font-medium text-gray-600">Quantity</label>
-                    <input type="number" class="w-full border rounded px-3 py-2" />
+                    <input type="number" id="qty" class="w-full border rounded px-3 py-2" />
+
+
+
+
+                    <label class="block text-sm font-medium text-gray-600">Amount</label>
+                    <input type="text" id="Amt" class="w-full border rounded px-3 py-2" />
+
+                    <!-- <label class="block text-sm font-medium text-gray-600">percentage</label> -->
+                    <input type="hidden" id="percentage" name="percentage" class="w-full border rounded px-3 py-2" />
+
                     </div>
                     <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded shadow">Place Order</button>
                 </form>
@@ -128,7 +140,7 @@
                 </div>
                 <div>
                 <label class="block text-sm font-medium text-gray-600">Description</label>
-                <textarea id="resume-desc" class="w-full border rounded px-3 py-2" rows="4" readonly></textarea>
+                <textarea id="resume-desc" class="w-full border rounded px-3 py-2" rows="6" readonly></textarea>
                 </div>
             </div>
             </div>
@@ -190,6 +202,7 @@
     </body>
     </html>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -224,6 +237,52 @@ $(document).ready(function() {
 
 
 
+    $('#qty').on('change', function() {
+      var qty = $(this).val();
+     var price = $('#resume-price').val();
+     var cash = qty*price;
+     cash.toFixed(2);
+    //  alert(cash);
+
+     $('#Amt').val(cash);
+    
+    });
+
+
+
+    $('select[name="category"]').on('change', function() {
+        var catId = $(this).val();
+
+        $.ajax({
+            url: '<?= base_url('user/getCategorypercentage') ?>',
+            type: 'GET',
+            data: { category_id: catId },
+            dataType: 'json',
+            success: function(data) {
+              // console.log(data);  
+
+            $('#percentage').val(data.percentage);
+
+                // var $serviceSelect = $('select[name="service"]');
+                // $serviceSelect.empty().append('<option>Choose a service</option>');
+
+                // $.each(data, function(index, service) {
+                //     $serviceSelect.append(
+                //         $('<option>', {
+                //             value: service.id,
+                //             text: service.name
+                //         })
+                //     );
+                // });
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+            }
+        });
+    });
+
+    
+
 
 
 
@@ -237,6 +296,7 @@ $(document).ready(function() {
 
     $('select[name="service"]').on('change', function() {
         var catId = $(this).val();
+        var percentage = $('#percentage').val();
 
         $.ajax({
             url: '<?= base_url('user/getServicesByservice') ?>',
@@ -244,12 +304,14 @@ $(document).ready(function() {
             data: { category_id: catId },
             dataType: 'json',
             success: function(data) {
-              // console.log(data);  
-
+              // console.log(percentage);  
+              var into=data.rate*percentage/100;
+             var amt = parseFloat(into) + parseFloat(data.rate);
+amt = amt.toFixed(2); // returns string like "123.45"
               $('#resume-service-name').val(data.name);        // or data.service_name based on DB
             $('#resume-min').val(data.min);
             $('#resume-max').val(data.max);
-            $('#resume-price').val(data.rate);
+            $('#resume-price').val(amt);
             $('#resume-desc').val(data.desc);
               
             },
@@ -261,5 +323,82 @@ $(document).ready(function() {
 
 
 });
+
+
+
+
+
+$('#orderForm').on('submit', function (e) {
+  e.preventDefault();
+
+var category = $('select[name="category"]').val();
+var service = $('select[name="service"]').val();
+var link = $('input[type="url"]').val();
+var qty = $('#qty').val();
+var amount = $('#Amt').val();
+
+// Validation
+if (!category || category === 'Choose a category') {
+    return Swal.fire('Missing Field', 'Please select a category.', 'warning');
+}
+if (!service || service === 'Choose a service') {
+    return Swal.fire('Missing Field', 'Please select a service.', 'warning');
+}
+if (!link || !/^https?:\/\/.+$/.test(link)) {
+    return Swal.fire('Invalid Link', 'Please enter a valid URL.', 'error');
+}
+if (!qty || qty <= 0) {
+    return Swal.fire('Invalid Quantity', 'Quantity must be greater than 0.', 'error');
+}
+
+var userId = <?= $_SESSION['user_id'] ?>;
+
+// Razorpay payment initiation
+$.ajax({
+    url: '<?= base_url("user/createRazorpayOrder") ?>',
+    type: 'POST',
+    data: { amount: amount },
+    dataType: 'json',
+    success: function (data) {
+        var options = {
+            "key": "<?= RAZORPAY_KEY_ID ?>", // From your config
+            "amount": data.amount,
+            "currency": "INR",
+            "name": "Chittu SMM",
+            "description": "Order Payment",
+            "order_id": data.rp_order_id,
+            "handler": function (response) {
+                // Call your controller to place the order
+                $.ajax({
+                    url: '<?= base_url("user/placeOrder") ?>',
+                    type: 'POST',
+                    data: {
+                        category_id: category,
+                        service_id: service,
+                        link: link,
+                        quantity: qty,
+                        amount: amount,
+                        razorpay_payment_id: response.razorpay_payment_id,
+                        razorpay_order_id: response.razorpay_order_id,
+                        user_id: userId
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        Swal.fire('Success', res.message, 'success');
+                        $('#orderForm')[0].reset();
+                    }
+                });
+            }
+        };
+
+        var rzp = new Razorpay(options);
+        rzp.open();
+    },
+    error: function () {
+        Swal.fire('Error', 'Could not initiate payment.', 'error');
+    }
+});
+});
+
 </script>
 

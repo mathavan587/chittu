@@ -69,3 +69,7 @@ $route['importServices'] = 'SmmController/importServices';
 // $route['getServicesByCategory'] = 'user/getServicesByCategory';
 
 $route['importServices_view'] = 'SmmController/importServices_view';
+
+
+$route['user/placeOrder'] = 'user/placeOrder';
+    
