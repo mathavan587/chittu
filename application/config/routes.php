@@ -63,6 +63,8 @@ $route['auth'] = 'auth/login';
 
 //user conntroller
 $route['user'] = 'User';
+//user conntroller
+$route['logout'] = 'User/logout';
 
 //import api
 $route['importServices'] = 'SmmController/importServices';

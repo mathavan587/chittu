@@ -31,7 +31,10 @@
 		$apimodel = new Apimodel();
 		$apimodel->tablename = 'categories';
 		$data['categories'] = $apimodel->getMultipleData();
-		$this->load->view('user/home',$data);
+		$this->load->view('user/header',$data);
+		$this->load->view('user/home');
+		$this->load->view('user/footer');
+
     }
 
 	public function logout()
@@ -94,37 +97,110 @@ public function getCategorypercentage(){
 
 public function placeOrder()
 {
-    $category_id = $this->input->post('category_id');
-    $service_id = $this->input->post('service_id');
-    $link = $this->input->post('link');
-    $quantity = $this->input->post('quantity');
-    $amount = $this->input->post('amount');
-    $user_id = $this->input->post('user_id');
+    // Step 1: Collect POST data
 
-    // Basic validation (do more in production)
-    if (!$category_id || !$service_id || !$link || !$quantity || !$amount) {
-        echo json_encode(['status' => 'error', 'message' => 'All fields are required.']);
-        return;
-    }
+$data=[
+    'category_id' => $this->input->post('category'),
+    'service_id'  => $this->input->post('service'),
+    'link'        => $this->input->post('link'),
+    'quantity'    => $this->input->post('quantity'),
+    'amount'      => $this->input->post('amount'),
+    'user_id'     => $_SESSION['user_id']
+];
+// print_r($_POST);
 
-    // Example insert
-    $this->load->model('Apimodel');
-    $this->Apimodel->tablename = 'orders';
+        $apimodel = new Apimodel();
+        $apimodel->tablename = "orders";
+        $dataPushed = $apimodel->insertData($data);
+        // echo  $dataPushed;
+          
+        
+    
+    $amount      = $data['amount'];
 
-    $insertData = [
-        'category_id' => $category_id,
-        'service_id' => $service_id,
-        'link' => $link,
-        'quantity' => $quantity,
-        'amount' => $amount,
-        'user_id' => $user_id,
-        'created_at' => date('Y-m-d H:i:s')
+    // // Step 2: Session data (validate session exists)
+    // if (!isset($_SESSION['name']) || !isset($_SESSION['email']) || !isset($_SESSION['mobile'])) {
+    //     echo json_encode(['status' => 'error', 'message' => 'User session is missing.']);
+    //     return;
+    // }
+
+    $name   = $_SESSION['name'];
+    $email  = $_SESSION['email'];
+    $mobile = $_SESSION['mobile'];
+
+    // // Step 3: Razorpay amount (in paise)
+    $razorpayAmount = $amount * 100;
+
+    // // Step 4: Call Razorpay Payment class
+    include_once "Razorpay_lib/amt.php";
+    $amt = new amt();
+
+    $paymentData = [
+        "data" => [
+            "name"    => $name,
+            "email"   => $email,
+            "contact" => $mobile,
+            "amt"     => $razorpayAmount,
+    'category' => $this->input->post('category'),
+    'service'  => $this->input->post('service'),
+    'link'        => $this->input->post('link'),
+    'quantity'    => $this->input->post('quantity'),
+    'amount'      => $this->input->post('amount'),
+    'user_id'     => $_SESSION['user_id']
+        ]
     ];
 
-    $this->Apimodel->insertData($insertData);
+    // // Step 5: Start Razorpay flow
+    $amt->pay($paymentData);
 
-    echo json_encode(['status' => 'success', 'message' => 'Order placed successfully!']);
+
+    // Step 6: Save to DB (INR format)
+
+
+   
 }
+
+
+public function verify_payment()
+{
+//    print_r($_POST);
+    // echo '1';   
+
+    // $paymentId = $this->input->post('razorpay_payment_id');
+    // $orderId   = $this->input->post('razorpay_order_id');
+    // $signature = $this->input->post('razorpay_signature');
+
+    // $category_id = $this->input->post('category_id');
+    // $service_id = $this->input->post('service_id');
+    // $link = $this->input->post('link');
+    // $quantity = $this->input->post('quantity');
+    // $amount = $this->input->post('amount');
+
+
+
+
+
+    $data=[
+        'paymentId' => $this->input->post('razorpay_payment_id'),
+        'orderId'   => $this->input->post('razorpay_order_id'),
+        'signature' => $this->input->post('razorpay_signature'),
+        'category_id' => $this->input->post('category'),
+        'service_id'  => $this->input->post('service'),
+        'link'        => $this->input->post('link'),
+        'quantity'    => $this->input->post('quantity'),
+        'amount'      => $this->input->post('amount'),
+        'user_id'     => $_SESSION['user_id']
+    ];
+// print_r($data);
+
+    include "Razorpay_lib/amt.php";
+$amt  = new amt();
+
+ $amt->verify_payment($data);
+
+}
+
+
 
 		
 		}
