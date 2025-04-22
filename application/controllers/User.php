@@ -163,18 +163,7 @@ $data=[
 
 public function verify_payment()
 {
-//    print_r($_POST);
-    // echo '1';   
 
-    // $paymentId = $this->input->post('razorpay_payment_id');
-    // $orderId   = $this->input->post('razorpay_order_id');
-    // $signature = $this->input->post('razorpay_signature');
-
-    // $category_id = $this->input->post('category_id');
-    // $service_id = $this->input->post('service_id');
-    // $link = $this->input->post('link');
-    // $quantity = $this->input->post('quantity');
-    // $amount = $this->input->post('amount');
 
 
 
@@ -192,11 +181,15 @@ public function verify_payment()
         'user_id'     => $_SESSION['user_id']
     ];
 // print_r($data);
+$apimodel = new Apimodel();
+$apimodel->tablename = "orders";
+$dataPushed = $apimodel->insertData($data);
+if ($dataPushed) {# code...
+    include('verify_payment1.php');
+}else{
+    echo "not";
+}
 
-    include "Razorpay_lib/amt.php";
-$amt  = new amt();
-
- $amt->verify_payment($data);
 
 }
 

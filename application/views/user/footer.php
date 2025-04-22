@@ -88,15 +88,15 @@ $(document).ready(function() {
 
 
     $('#qty').on('change', function() {
-      var qty = $(this).val();
-     var price = $('#resume-price').val();
-     var cash = qty*price;
-     cash.toFixed(2);
-    //  alert(cash);
+    var qty = parseFloat($(this).val()) || 0;
+    var price = parseFloat($('#resume-price').val()) || 0;
 
-     $('#Amt').val(cash);
-    
-    });
+    var cash = qty * price;
+    cash = cash.toFixed(2); // Assign it back to keep the decimal places
+  
+    $('#Amt').val(cash);
+});
+
 
 
 
@@ -144,32 +144,45 @@ $(document).ready(function() {
 
 
 
-    $('select[name="service"]').on('change', function() {
-        var catId = $(this).val();
-        var percentage = $('#percentage').val();
+    $('select[name="service"]').on('change', function () {
+    var serviceId = $(this).val();                      // Correct: it's the selected service ID
+    var percentage = parseFloat($('#percentage').val()) || 0; // Safe fallback if empty
 
-        $.ajax({
-            url: '<?= base_url('user/getServicesByservice') ?>',
-            type: 'GET',
-            data: { category_id: catId },
-            dataType: 'json',
-            success: function(data) {
-              // console.log(percentage);  
-              var into=data.rate*percentage/100;
-             var amt = parseFloat(into) + parseFloat(data.rate);
-               amt = amt.toFixed(2); // returns string like "123.45"
-              $('#resume-service-name').val(data.name);        // or data.service_name based on DB
+    $.ajax({
+        url: '<?= base_url('user/getServicesByservice') ?>',
+        type: 'GET',
+        data: { category_id: serviceId },               // Correct key: service_id
+        dataType: 'json',
+        success: function (data) {
+            if (!data || !data.rate) {
+                console.error("Invalid response data", data);
+                return;
+            }
+
+            // Price calculation logic
+            var baseRate = parseFloat(data.rate);
+            var markup = (baseRate * percentage) / 100;
+            var finalRate = baseRate + markup;
+            
+            if (Number.isInteger(finalRate)) {
+              console.log("✅ finalRate is a whole number");
+            } else {
+  var finalRate = (baseRate + markup).toFixed(2);
+    console.log("❌ finalRate is NOT a whole number");
+}
+
+            // Populate fields
+            $('#resume-service-name').val(data.name);
             $('#resume-min').val(data.min);
             $('#resume-max').val(data.max);
-            $('#resume-price').val(amt);
+            $('#resume-price').val(finalRate);
             $('#resume-desc').val(data.desc);
-              
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX Error:", error);
-            }
-        });
+        },
+        error: function (xhr, status, error) {
+            console.error("AJAX Error:", error);
+        }
     });
+});
 
 
 });
@@ -177,68 +190,45 @@ $(document).ready(function() {
 
 
 
-// $('#orderForm').on('submit', function (e) {
-//     e.preventDefault(); // stop default form submission
+$('#orderForm').on('submit', function (e) {
+  // Stop the form from submitting
 
-//     // Grab the values
-//     var category = $('select[name="category"]').val();
-//     var service = $('select[name="service"]').val();
-//     var link = $('input[type="url"]').val();
-//     var qty = $('#qty').val();
-//     var amount = $('#Amt').val();
- 
+    // Get form field values
+    var category = $('select[name="category"]').val();
+    var service = $('select[name="service"]').val();
+    var link = $('input[type="url"]').val();
+    var qty = $('#qty').val();
 
-//     // alert(category);
+    // Validation
+    if (!category || category === 'Choose a category') {
+      e.preventDefault();
+        return Swal.fire('Missing Field', 'Please select a category.', 'warning');
+    }
 
-//     // Validation
-//     if (!category || category === 'Choose a category') {
-//         return Swal.fire('Missing Field', 'Please select a category.', 'warning');
-//     }
-//     if (!service || service === 'Choose a service') {
-//         return Swal.fire('Missing Field', 'Please select a service.', 'warning');
-//     }
-//     if (!link || !/^https?:\/\/.+$/.test(link)) {
-//         return Swal.fire('Invalid Link', 'Please enter a valid URL.', 'error');
-//     }
-//     if (!qty || qty <= 0) {
-//         return Swal.fire('Invalid Quantity', 'Quantity must be greater than 0.', 'error');
-//     }
+    if (!service || service === 'Choose a service') {
+      e.preventDefault();
+        return Swal.fire('Missing Field', 'Please select a service.', 'warning');
+    }
 
-    // // Create post data
-    // var postData = {
-    //     category_id: category,
-    //     service_id: service,
-    //     link: link,
-    //     quantity: qty,
-    //     amount: amount
-    // };
+    if (!link || !/^https?:\/\/.+$/.test(link)) {
+      e.preventDefault();
+        return Swal.fire('Invalid Link', 'Please enter a valid URL.', 'error');
+    }
 
-    // // AJAX POST
-    // $.ajax({
-    //     url: '<?= base_url("user/placeOrder") ?>',
-    //     type: 'POST',
-    //     data: postData,
-    //     // dataType: 'json',
-    //     success: function (response) {
-    //       console.log(response);
-    //       window.location.href = "<?= base_url("user/placeOrder") ?>";   
-    //         if (response.status === 'success') {
-    //             Swal.fire('Success', response.message, 'success').then(() => {
-    //                 $('#orderForm')[0].reset();
-                  
-    //                 $('#resume-service-name, #resume-min, #resume-max, #resume-price, #resume-desc').val('');
-    //                 $('#Amt').val('');
-    //             });
-    //         } else {
-    //             Swal.fire('Error', response.message, 'error');
-    //         }
-    //     }
-    //     // ,
-    //     // error: function () {
-    //     //     Swal.fire('Error', 'Something went wrong on the server.', 'error');
-    //     // }
-    // });
-// });
+    if (!qty || qty <= 0) {
+      e.preventDefault();
+        return Swal.fire('Invalid Quantity', 'Quantity must be greater than 0.', 'error');
+    }
+
+    // ✅ If everything is valid
+    Swal.fire({
+        icon: 'success',
+        title: 'Validated!',
+        text: 'All form fields look good! You can now proceed.',
+        confirmButtonColor: '#3085d6'
+    });
+});
+
 
 
 

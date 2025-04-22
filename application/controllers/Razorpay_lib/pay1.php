@@ -31,14 +31,17 @@
                         amount: '<?=$data["data"]['amt']?>',
                         user_id: '<?=$data["data"]['user_id']?>'
                     },
-                    success: function(data) {
+                    success: function(data) {   
+                        // console.log('resp'+data);
                         Swal.fire({
                             icon: 'success',
                             title: 'Payment Verified!',
                             text: 'Your payment was successfully verified.',
                             confirmButtonColor: '#3085d6'
-                        });
-                        console.log(data);
+                        }).then(() => {
+    // 👇 Change the URL to your success page
+    window.location.href = "<?= base_url('user') ?>";
+});
                     },
                     error: function(err) {
                         Swal.fire({

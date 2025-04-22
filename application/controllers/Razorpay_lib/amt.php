@@ -27,33 +27,33 @@ class amt
 
     public function verify_payment($data)
     {
-    //   include 'config.php';
-    //   $api = new Api($keyId,$keySecret);
+      include 'config.php';
+      $api = new Api($keyId,$keySecret);
       
   
-    //   $paymentId = $data['razorpay_payment_id'];
-    //   $orderId = $data['razorpay_order_id'];
-    //   $signature = $data['razorpay_signature'];
-    //   $attributes = [
-    //       'razorpay_order_id' => $orderId,
-    //       'razorpay_payment_id' => $paymentId,
-    //       'razorpay_signature' => $signature
-    //   ];
+      $paymentId = $data['razorpay_payment_id'];
+      $orderId = $data['razorpay_order_id'];
+      $signature = $data['razorpay_signature'];
+      $attributes = [
+          'razorpay_order_id' => $orderId,
+          'razorpay_payment_id' => $paymentId,
+          'razorpay_signature' => $signature
+      ];
 
-      print_r($data);
+    //   print_r($data);
   
-//       try {
-//           $attributes = [
-//               'razorpay_order_id' => $orderId,
-//               'razorpay_payment_id' => $paymentId,
-//               'razorpay_signature' => $signature
-//           ];
+      try {     
+          $attributes = [
+              'razorpay_order_id' => $orderId,
+              'razorpay_payment_id' => $paymentId,
+              'razorpay_signature' => $signature
+          ];
       
-//           $api->utility->verifyPaymentSignature($attributes);
-//   //   print_r($attributes);
-//           echo "Payment Verified Successfully!";
-//       } catch (Exception $e) {
-//           echo "Payment Verification Failed!";
-//       }
+          $api->utility->verifyPaymentSignature($attributes);
+  //   print_r($attributes);
+          echo "Payment Verified Successfully!";
+      } catch (Exception $e) {
+          echo "Payment Verification Failed!";
+      }
     }
 }
