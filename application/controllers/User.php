@@ -109,9 +109,9 @@ $data=[
 ];
 // print_r($_POST);
 
-        $apimodel = new Apimodel();
-        $apimodel->tablename = "orders";
-        $dataPushed = $apimodel->insertData($data);
+        // $apimodel = new Apimodel();
+        // $apimodel->tablename = "orders";
+        // $dataPushed = $apimodel->insertData($data);
         // echo  $dataPushed;
           
         
@@ -145,9 +145,9 @@ $data=[
     'service'  => $this->input->post('service'),
     'link'        => $this->input->post('link'),
     'quantity'    => $this->input->post('quantity'),
-    'amount'      => $this->input->post('amount'),
+    'amount'      =>  $razorpayAmount,
     'user_id'     => $_SESSION['user_id']
-        ]
+        ]           
     ];
 
     // // Step 5: Start Razorpay flow

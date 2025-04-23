@@ -7,7 +7,6 @@ function placeOrder()
     $paymentId = $this->input->post('razorpay_payment_id');
     $orderId   = $this->input->post('razorpay_order_id');
     $signature = $this->input->post('razorpay_signature');
-
     $category_id = $this->input->post('category_id');
     $service_id = $this->input->post('service_id');
     $link = $this->input->post('link');
