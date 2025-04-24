@@ -7,7 +7,7 @@
             <h2 class="text-xl font-bold text-gray-700">New Order</h2>
             <div class="space-x-2">
             <button class="bg-blue-600 text-white px-4 py-1 rounded shadow">Single Order</button>
-            <button class="bg-gray-200 text-gray-700 px-4 py-1 rounded shadow">Mass Order</button>
+            <!-- <button class="bg-gray-200 text-gray-700 px-4 py-1 rounded shadow">Mass Order</button> -->
             </div>
         </div>
 

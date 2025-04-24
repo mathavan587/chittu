@@ -105,7 +105,7 @@ $data=[
     'link'        => $this->input->post('link'),
     'quantity'    => $this->input->post('quantity'),
     'amount'      => $this->input->post('amount'),
-    'user_id'     => $_SESSION['user_id']
+    'user_id'     => $this->session->userdata('user_id')
 ];
 // print_r($_POST);
 
@@ -124,12 +124,13 @@ $data=[
     //     return;
     // }
 
-    $name   = $_SESSION['name'];
-    $email  = $_SESSION['email'];
-    $mobile = $_SESSION['mobile'];
+    $name   =  $this->session->userdata('name');
+    $email  =  $this->session->userdata('email');
+    $mobile =  $this->session->userdata('mobile');
 
     // // Step 3: Razorpay amount (in paise)
     $razorpayAmount = $amount * 100;
+
 
     // // Step 4: Call Razorpay Payment class
     include_once "Razorpay_lib/amt.php";
@@ -146,7 +147,7 @@ $data=[
     'link'        => $this->input->post('link'),
     'quantity'    => $this->input->post('quantity'),
     'amount'      =>  $razorpayAmount,
-    'user_id'     => $_SESSION['user_id']
+    'user_id'     => $this->session->userdata('user_id')
         ]           
     ];
 
@@ -165,6 +166,21 @@ public function verify_payment()
 {
 
 
+    $razorpayAmount=$this->input->post('amount');
+   // --- The Formatting Logic ---
+
+// 1. Ensure the input is treated as a number (important if it might be a string)
+$numericAmount = (float)$razorpayAmount;
+
+// 2. Divide by 100 to position the decimal point correctly
+$amountWithDecimal = $numericAmount / 100;
+
+// 3. Format the result to always have exactly two decimal places
+//    Params: number_format(number, decimals, decimal_separator, thousands_separator)
+//    We want 2 decimals, '.' as separator, and no thousands separator ('')
+$formattedAmountString = number_format($amountWithDecimal, 2, '.', '');
+// Now $formattedAmountString holds the string "20589.66"
+
 
 
 
@@ -177,10 +193,14 @@ public function verify_payment()
         'service_id'  => $this->input->post('service'),
         'link'        => $this->input->post('link'),
         'quantity'    => $this->input->post('quantity'),
-        'amount'      => $this->input->post('amount'),
+        'amount'      => $formattedAmountString,
         'user_id'     => $_SESSION['user_id']
     ];
-// print_r($data);
+
+
+
+    
+    // print_r($data);
 $apimodel = new Apimodel();
 $apimodel->tablename = "orders";
 $dataPushed = $apimodel->insertData($data);
@@ -193,6 +213,21 @@ if ($dataPushed) {# code...
 
 }
 
+public function Transaction(){
+    $this->check_session();
+    $apimodel = new Apimodel();
+    $apimodel->tablename = 'orders';
+    $select=array('id','service_id','amount','user_id','created_at','paymentId');
+    $condition=array('is_deleted'=>'0','user_id'=>$_SESSION['user_id']);
+    $data['transaction'] = $apimodel->getMultipleData($condition,$select);
+
+
+  
+
+    $this->load->view('user/header',$data);
+    $this->load->view('user/transaction');
+    $this->load->view('user/footer');
+}
 
 
 		

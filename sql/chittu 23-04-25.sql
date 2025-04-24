@@ -620,7 +620,7 @@ CREATE TABLE `orders` (
   `paymentId` varchar(500) NOT NULL,
   `orderId` varchar(500) NOT NULL,
   `signature` varchar(500) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `orders`

@@ -12,7 +12,7 @@ class amt
 
         $api   = new Api($keyId, $keySecret);
         $order = $api->order->create([
-            'receipt'         => 'ORD_12345',
+            'receipt'         => 'ORD_1234567',
             'amount'          => $data["data"]['amt'], // Amount in paise (50000 paise = ₹500)
             'currency'        => 'INR',
             'payment_capture' => 1, // Auto-capture payment

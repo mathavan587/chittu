@@ -27,16 +27,16 @@
     <!-- Navigation Menu -->
     <nav class="hidden md:flex items-center space-x-6 text-sm">
       <a href="#" class="hover:text-blue-400">📊 Statistics</a>
-      <a href="#" class="hover:text-blue-400">🛒 New Order</a>
-      <a href="#" class="hover:text-blue-400">📦 Order</a>
-      <a href="#" class="hover:text-blue-400">🧾 Services</a>
-      <a href="#" class="hover:text-blue-400">🔗 API</a>
+      <a href="<?=base_url('user')?>" class="hover:text-blue-400">🛒 New Order</a>
+      <!-- <a href="#" class="hover:text-blue-400">📦 Order</a> -->
+      <!-- <a href="#" class="hover:text-blue-400">🧾 Services</a> -->
+      <!-- <a href="#" class="hover:text-blue-400">🔗 API</a> -->
       <!-- <a href="#" class="hover:text-blue-400 relative">
         🛟 Support
         <span class="absolute -top-2 -right-3 bg-blue-500 text-white text-xs rounded-full px-1">0</span> -->
       </a>
-      <a href="#" class="hover:text-blue-400">➕ Add funds</a>
-      <a href="#" class="hover:text-blue-400">📃 Transaction logs</a>
+      <!-- <a href="#" class="hover:text-blue-400">➕ Add funds</a> -->
+      <a href="<?=base_url('transaction')?>" class="hover:text-blue-400">📃 Transaction logs</a>
     </nav>
 
     <!-- Right Side -->

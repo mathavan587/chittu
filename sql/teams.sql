@@ -241,7 +241,7 @@ CREATE TABLE IF NOT EXISTS `clients` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `clients`
@@ -264,7 +264,7 @@ CREATE TABLE IF NOT EXISTS `college` (
   `id` int NOT NULL AUTO_INCREMENT,
   `College` varchar(130) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `college`
@@ -351,7 +351,7 @@ CREATE TABLE IF NOT EXISTS `events` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `events`
@@ -437,7 +437,7 @@ CREATE TABLE IF NOT EXISTS `intership` (
   `duration` int NOT NULL,
   `createAt` timestamp NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `intership`
@@ -457,19 +457,19 @@ DROP TABLE IF EXISTS `leads`;
 CREATE TABLE IF NOT EXISTS `leads` (
   `id` int NOT NULL AUTO_INCREMENT,
   `status` enum('New','Contacted','Qualified','Closed') DEFAULT 'New',
-  `project_name` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `project_name` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `delete` enum('False','True') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `delete` enum('False','True') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `due_date` date NOT NULL,
   `user_id` int NOT NULL,
   `priority` enum('Heigh','Low','Medium') NOT NULL,
-  `worke_state` enum('Design','Development','UiUx','Marketing') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `worke_state` enum('Design','Development','UiUx','Marketing') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `working_state` enum('start','in progress','pandding','completed') NOT NULL,
   `refered_by` varchar(500) NOT NULL,
   `Cid` int NOT NULL,
   `Amt` varchar(25) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `leads`
@@ -502,7 +502,7 @@ CREATE TABLE IF NOT EXISTS `links` (
   `user_id` int NOT NULL,
   `link` varchar(255) NOT NULL,
   `catagery` varchar(125) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 

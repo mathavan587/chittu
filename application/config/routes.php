@@ -63,6 +63,8 @@ $route['auth'] = 'auth/login';
 
 //user conntroller
 $route['user'] = 'User';
+$route['transaction'] = 'User/Transaction';
+// $route['Statistics'] = 'User';
 //user conntroller
 $route['logout'] = 'User/logout';
 
