@@ -17,6 +17,19 @@ class SmmController extends CI_Controller
 			$this->load->model('apimodel');
 
 		}
+
+        public function check_session()
+        {
+            $userType = $this->session->userdata('usertype');
+        
+            if ($userType === 'admin') {
+                
+            }else{
+            redirect('logout'); // No need for return, just call redirect
+            }
+        
+            // Otherwise, continue
+        }
     // public function importServices()
     // {
     //     $api_url = 'https://www.cheapsmmhub.com/api/v2';
@@ -70,13 +83,26 @@ class SmmController extends CI_Controller
     // }
     public function importServices()
     {
-        $api_url = 'https://www.cheapsmmhub.com/api/v2';
-        $api_key = '4c514bc5d240393a9f4f357d132aea17ce59937c';
+        $this->check_session();
+        $api_url=$this->input->post('api');
+        $api_key=$this->input->post('key');
+        // $api_url = 'https://www.cheapsmmhub.com/api/v2';
+        // $api_key = '4c514bc5d240393a9f4f357d132aea17ce59937c';
     
         $post_fields = [    
             'key'    => $api_key,
             'action' => 'services'
         ];
+
+
+        $data = [
+            'api_url' => $api_url,
+            'api_key'       => $api_key
+        ];
+
+        $apimodel = new Apimodel();
+        $apimodel->tablename = 'import_logs';
+        $result=$apimodel->insertData($data);
     
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $api_url);
@@ -135,7 +161,7 @@ class SmmController extends CI_Controller
 
         $categories = array_keys($grouped);
 
-                print_r($categories);
+                // print_r($categories);
             
                 foreach ($categories as $category) {
                     $data = [
@@ -163,7 +189,7 @@ class SmmController extends CI_Controller
                                 //    log_message('debug',json_encode($result));
 
         $result=$apimodel->insertData($data);
-//  echo $result;
+ echo $result;
 
 
         }

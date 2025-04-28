@@ -228,9 +228,8 @@
     $('#submitBtn').removeClass('hidden');
     $('#submittingBtn').addClass('hidden');
    
-
-                //1   
-} else {
+}
+ if (response == 1) {
 
     $('#successAlert').removeClass('hidden');
     $('#submitBtn').removeClass('hidden');
@@ -247,6 +246,24 @@
             window.location.href = "<?= base_url('user') ?>";
         }
     });
+}
+ if (response == 2) {
+
+$('#successAlert').removeClass('hidden');
+$('#submitBtn').removeClass('hidden');
+$('#submittingBtn').addClass('hidden');
+
+Swal.fire({
+    title: "Success!",
+    text: "Your are login.",
+    icon: "success",
+    confirmButtonText: "OK"
+}).then((result) => {
+    if (result.isConfirmed) {
+        // Redirect to home page after OK
+        window.location.href = "<?= base_url('admin') ?>";
+    }
+});
 }
 
           },

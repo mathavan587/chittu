@@ -62,7 +62,7 @@ $route['login'] = 'welcome/login';
 $route['auth'] = 'auth/login';
 
 //user conntroller
-$route['user'] = 'User';
+$route['user'] = 'User/index';
 $route['transaction'] = 'User/Transaction';
 // $route['Statistics'] = 'User';
 //user conntroller
@@ -77,3 +77,17 @@ $route['importServices_view'] = 'SmmController/importServices_view';
 
 $route['user/placeOrder'] = 'user/placeOrder';
     
+
+//admin conntroller
+$route['admin'] = 'Admin/index';
+$route['admin/user'] = 'Admin/user';
+$route['services'] = 'Admin/services';
+$route['status'] = 'Admin/status';
+$route['update/service'] = 'Admin/updateService';
+$route['edit/service/(:num)'] = 'Admin/editService/$1';
+$route['edit/categorie/(:num)'] = 'Admin/editcategorie/$1';
+$route['delete'] = 'Admin/delete';
+$route['categorie/delete'] = 'Admin/delete_categorie';
+$route['editcategories'] = 'Admin/editcategories';
+$route['import'] = 'Admin/import';
+$route['categories'] = 'Admin/categories';

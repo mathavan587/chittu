@@ -117,7 +117,7 @@
 
       <!-- Login Redirect -->
       <p class="text-center text-gray-600 text-sm mt-6">
-        Already have an account? <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Log in</a>
+        Already have an account? <a href="<?=base_url('login')?>" class="text-indigo-600 hover:text-indigo-800 font-medium">Log in</a>
       </p>
     </form>
   </div>

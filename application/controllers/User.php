@@ -1,7 +1,7 @@
 <?php
 		defined('BASEPATH') OR exit('No direct script access allowed');
 		class User extends CI_Controller {
-			public function __construct()
+ 		public function __construct()
 		{
 			parent::__construct();
 			$this->load->helper('url'); // Load the URL helper
@@ -9,18 +9,18 @@
 			$this->load->library('session'); // (optional) if using flashdata
 			$this->load->model('apimodel');
 
-		}
-		public function check_session()
+		}   
+        public function check_session()
 {
+    // Debugging session data
+    // print_r($this->session->userdata());
     $userType = $this->session->userdata('usertype');
 
-    if (!$userType || !$userType === 'user') {
-        // If usertype is missing or is just a normal user, log them out
-        redirect('logout'); // No need for return, just call redirect
+    if ($userType !== 'user') {
+        redirect('logout');
     }
-
-    // Otherwise, continue
 }
+
 		
     public function index(){
 		$this->check_session();
@@ -172,8 +172,8 @@ public function verify_payment()
 // 1. Ensure the input is treated as a number (important if it might be a string)
 $numericAmount = (float)$razorpayAmount;
 
-// 2. Divide by 100 to position the decimal point correctly
 $amountWithDecimal = $numericAmount / 100;
+// 2. Divide by 100 to position the decimal point correctly
 
 // 3. Format the result to always have exactly two decimal places
 //    Params: number_format(number, decimals, decimal_separator, thousands_separator)

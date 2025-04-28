@@ -29,7 +29,6 @@
         
             // Get user data by email
             $user = $apimodel->getSingleData(['email' => $requestData['email']]);
-        
             if (!$user) {
                 echo "0"; // User not found
                 return;
@@ -47,24 +46,28 @@
                 echo "0"; // Inactive account
                 return;
             }
-        
+            
             // Log the login event
             $apimodel->tablename = 'logs';
             $apimodel->insertData([
                 'email' => $user->email,
                 'mobile' => $user->mobile,
-                'logged_at' => date('Y-m-d H:i:s')
+                'created_at' => date('Y-m-d H:i:s')
             ]);
-        
+            
             // Set session data
             $this->session->set_userdata([
                 'user_id'    => $user->id,
                 'email'      => $user->email,
                 'name'       => $user->name,
-                'mobile'       => $user->mobile,
-                'usertype'   => $user->usertype,
-                'logged_in'  => true
+                'mobile'     => $user->mobile,
+                'usertype'   => $user->usertype
+                // 'logged_in'  => true
             ]);
+            
+
+            
+
         
             // Return based on usertype
             switch ($user->usertype) {

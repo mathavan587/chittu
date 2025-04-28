@@ -109,10 +109,21 @@ public function verify(){
 }
 public function login(){
 
+
+	$userType = $this->session->userdata('usertype');
+    if ($userType === 'user') {
+    redirect('user'); // No need for return, just call redirect
+        
+    }elseif ($userType === 'admin') {
+		redirect('admin'); // No need for return, just call redirect
+			
+		}
+
 	$data=array(
 		'title'=>'Login',
 		'carde_title'=>'Login Account'
 	);
+
 	$this->load->view('login',$data);
 }
 		
