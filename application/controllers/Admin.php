@@ -122,7 +122,7 @@ public function index()
                                         // $condition=array('is_deleted'=>'0');
                                         // $orders_count = count($apimodel->getMultipleData($condition,$select));
                                         $apimodel->tablename = 'services';
-                                        $select=array(`id`, `service_id`, `name`, `category`, `rate`, `set_rate`, `min`, `max`, `type`, `desc`);
+                                        $select=array('id', 'service_id', 'name', 'category', 'rate', 'set_rate', 'min', 'max', 'type', 'desc');
                                         $condition=array('is_deleted'=>'0');
                                         $services_count = count($apimodel->getMultipleData($condition,$select));
                                         $services = $apimodel->getMultipleData($condition,$select);

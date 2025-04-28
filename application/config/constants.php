@@ -89,11 +89,11 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 // if ($_SERVER['CI_ENV'] === "production") {
 //     // production
 
-//     defined('DATABASE_NAME')     or define('DATABASE_NAME', 'canihelpyou'); // Database Name
-//     defined('DATABASE_USERNAME')       or define('DATABASE_USERNAME', 'canihelpyou'); // Database Username
-//     defined('DATABASE_PASS')      or define('DATABASE_PASS', 'Admin@CIHY'); // Database Password
-//     defined('DATABASE_HOST')      or define('DATABASE_HOST', 'localhost'); // Hostname
-//     defined('BASE_URL')      or define('BASE_URL', 'https://canihelpyou.co.in/'); // url
+// defined('DATABASE_NAME')     or define('DATABASE_NAME', 'chittuin_smm'); // Database Name
+// defined('DATABASE_USERNAME')       or define('DATABASE_USERNAME', 'chittuin_smm'); // Database Username
+// defined('DATABASE_PASS')      or define('DATABASE_PASS', 'Mohansv@98'); // Database Password
+// defined('DATABASE_HOST')      or define('DATABASE_HOST', 'localhost'); // Hostname
+// defined('BASE_URL')      or define('BASE_URL', 'https://chittu.in/'); // url
 
 // } else {
 
