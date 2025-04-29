@@ -1,3 +1,4 @@
+<!-- Include Libraries -->
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -10,7 +11,7 @@
 <!-- Font Awesome -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
-<!-- DataTables Buttons extension -->
+<!-- DataTables Buttons Extension -->
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.flash.min.js"></script>
@@ -20,114 +21,82 @@
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
-<!-- SweetAlert CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.min.css">
+<!-- SweetAlert2 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- SweetAlert JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.min.js"></script>
-     <!-- Edit Button -->
-    
+<!-- Edit Button -->
 <div class="py-2 w-10">
-
-    <a href="<?=base_url('import')?>"
-    class="edit-btn   bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2">
-    <i class="fas fa-edit"></i>
-</a>
+    <a href="<?= base_url('import') ?>"
+       class="edit-btn bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2">
+        <i class="fas fa-edit"></i>
+    </a>
 </div>
 
+<!-- Table -->
 <table id="myTable" class="relative overflow-x-auto shadow-md sm:rounded-lg" style="width:100%">
-        <thead>
-            <tr>
-                <th>S/no</th>
-                <th>Service id</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Percentage</th>
-                <th>Rate</th>
-                <th>Display Rate</th>
-                <!-- <th>Status</th> -->
-                <!-- <th>Date</th> -->
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
+    <thead>
+        <tr>
+            <th>S/no</th>
+            <th>Service ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Percentage</th>
+            <th>Rate</th>
+            <th>Display Rate</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
         <?php $i = 0; foreach($services as $service) { $i++; 
+            $apimodel = new Apimodel();
+            $apimodel->tablename = 'categories';
+            $getdata = $apimodel->getSingleData(['id' => $service->category], ['categories', 'percentage']);
+        ?>
+        <tr>
+            <td><?= $i ?></td>
+            <td><?= $service->service_id ?></td>
+            <td><?= $service->name ?></td>
+            <td><?= $getdata->categories ?></td>
+            <td><?= $getdata->percentage . '%' ?></td>
+            <td><?= '₹' . $service->rate ?></td>
+            <td><?= '₹' . $service->set_rate ?></td>
+            <td>
+                <div class="flex items-center gap-2">
+                    <!-- Block / Unblock Button -->
+                    <button type="button"
+                        class="<?php if ($service->status) { echo "block-btn"; } else { echo "unblock-btn"; } ?>
+                               focus:outline-none text-white
+                               <?php echo ($service->status) ? 'bg-green-700 hover:bg-green-800' : 'bg-red-700 hover:bg-red-800'; ?>
+                               focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2"
+                        data-id="<?= $service->id ?>">
+                        <?php if ($service->status) { ?>
+                            <i class="fas fa-check-circle"></i>
+                            <?php } else { ?>
+                                <i class="fas fa-ban"></i>
+                        <?php } ?>
+                    </button>
 
-                $apimodel = new Apimodel();
-                $apimodel->tablename = 'categories';
-                $getdata = $apimodel->getSingleData(array('id' => $service->category),array('categories','percentage'));
-                ?>
-                <tr>
-                    <td><?=$i?></td>
-                    <td><?=$service->service_id?></td>
-                    <td><?=$service->name?></td>
-                    <td><?=$getdata->categories	?></td>
-                    <td><?=$getdata->percentage.'%'?></td>
-                    <td><?='₹'.$service->rate?></td>
-                    <td><?='₹'.$service->set_rate?></td>
-                    <!-- <td>
-                        <mark class="px-2 text-white
-                        <?php 
-                        if ($service->status == 0) {
-                            echo "bg-green-600";
-                        } else {
-                            echo "bg-red-600";
-                        }
-                        ?> 
-                        rounded-sm dark:bg-blue-500">
-                            <?=$user->usertype?>
-                        </mark>
-                    </td> -->
-                    <!-- <td><?= date('d M y', strtotime($service->created_at)) ?></td> -->
-                    <td>
-    <div class="flex items-center gap-2">
-        <!-- Block / Unblock Button -->
-        <button type="button"
-            class="
-                <?php if ($service->status == 0) { echo "block-btn"; } else { echo "unblock-btn"; } ?>
-                focus:outline-none text-white
-                <?php 
-                if ($service->status == 0) { 
-                    echo "bg-red-700 hover:bg-red-800"; 
-                } else { 
-                    echo "bg-green-700 hover:bg-green-800"; 
-                } 
-                ?>
-                focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2
-            "
-            data-id="<?=$service->id?>">
-            <?php if ($service->status == 0) { ?>
-                <i class="fas fa-ban"></i>
-            <?php } else { ?>
-                <i class="fas fa-check-circle"></i> 
-            <?php } ?>
-        </button>
+                    <!-- Edit Button -->
+                    <a href="<?= base_url('edit/service/' . $service->id) ?>"
+                       class="edit-btn bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2">
+                        <i class="fas fa-edit"></i>
+                    </a>
 
-        <!-- Edit Button -->
-        <a href="<?=base_url('edit/service/'.$service->id)?>"
-    class="edit-btn bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2">
-    <i class="fas fa-edit"></i>
-</a>
-    
+                    <!-- Delete Button -->
+                    <button type="button"
+                        class="delete-btn bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2"
+                        data-id="<?= $service->id ?>">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>
 
-<!-- Delete Button -->
-<button type="button"
-    class="delete-btn bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2"
-    data-id="<?=$service->id?>">
-    <i class="fas fa-trash"></i>
-</button>
-</div>
-</td>
-
-
-
-
-                </tr>
-            <?php } ?>
-        </tbody>
-    </table>
-
-<!-- DataTables Initialization Script -->
+<!-- jQuery Code -->
 <script>
 $(document).ready(function() {
     // Initialize DataTable
@@ -137,178 +106,93 @@ $(document).ready(function() {
         responsive: true
     });
 
-    // Block button click event
-    $('.block-btn').on('click', function() {
-        var userId = $(this).data('id');  // Get user ID from button data-id
-        // SweetAlert confirmation
-        // alert(userId);
+    // Function for block/unblock
+    function updateStatus(userId, action) {
+        let actionText = action === 'block' ? 'Inactive' : 'Active';
+        let successTitle = action === 'block' ? 'Blocked!' : 'Activated!';
+        let successMessage = action === 'block' ? 'The service has been Inactivated.' : 'The service has been Activated.';
+
         Swal.fire({
             title: 'Are you sure?',
-            text: 'You are about to Inactive this user.',
+            text: `You are about to ${actionText} this service.`,
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, Inactive it!',
+            confirmButtonText: `Yes, ${actionText} it!`,
             cancelButtonText: 'No, cancel!',
-            reverseButtons: true
+            reverseButtons: true 
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: '<?= base_url("status") ?>', // Update with your controller URL
+                    url: '<?= base_url("status") ?>',
                     type: 'POST',
-                    data: {
-                        id: userId
-                    },
+                    data: { id: userId },
                     success: function(response) {
-                        // console.log(response);
                         var res = JSON.parse(response);
-                        
                         if (res.success) {
-                            // Show success SweetAlert
-                            Swal.fire(
-                                'Blocked!',
-                                'The user has been Disactived.',
-                                'success'
-                            ).then(() => {
-                                location.reload(); // Reload the page to reflect changes
+                            Swal.fire(successTitle, successMessage, 'success')
+                            .then(() => {
+                                location.reload();
                             });
                         } else {
-                            // Show error SweetAlert
-                            Swal.fire(
-                                'Error!',
-                                'Failed to block the user. Please try again.',
-                                'error'
-                            );
+                            Swal.fire('Error!', res.message || 'Failed to update status.', 'error');
                         }
                     },
                     error: function() {
-                        Swal.fire(
-                            'Error!',
-                            'There was an error processing your request.',
-                            'error'
-                        );
+                        Swal.fire('Error!', 'There was an error processing your request.', 'error');
+                    }
+                });
+            }
+        });
+    }
+
+    // Block Button Click
+    $(document).on('click', '.block-btn', function() {
+        var userId = $(this).data('id');
+        updateStatus(userId, 'block');
+    });
+
+    // Unblock Button Click
+    $(document).on('click', '.unblock-btn', function() {
+        var userId = $(this).data('id');
+        updateStatus(userId, 'unblock');
+    });
+
+    // Delete Button Click
+    $(document).on('click', '.delete-btn', function() {
+        var serviceId = $(this).data('id');
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '<?= base_url("delete") ?>',
+                    type: 'POST',
+                    data: { id: serviceId },
+                    success: function(response) {
+                        var res = JSON.parse(response);
+                        if (res.success) {
+                            Swal.fire('Deleted!', 'The service has been deleted.', 'success')
+                            .then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire('Error!', res.message || 'Failed to delete service.', 'error');
+                        }
+                    },
+                    error: function() {
+                        Swal.fire('Error!', 'Something went wrong.', 'error');
                     }
                 });
             }
         });
     });
-
-
-
-    // Block button click event
-    $('.unblock-btn').on('click', function() {
-        var userId = $(this).data('id');  // Get user ID from button data-id
-        // SweetAlert confirmation
-        // alert(userId);
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You are about to Active this user.',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, block it!',
-            cancelButtonText: 'No, cancel!',
-            reverseButtons: true
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '<?= base_url("status") ?>', // Update with your controller URL
-                    type: 'POST',
-                    data: {
-                        id: userId
-                    },
-                    success: function(response) {
-                        // console.log(response);
-                        var res = JSON.parse(response);
-                        
-                        if (res.success) {
-                            // Show success SweetAlert
-                            Swal.fire(
-                                'Blocked!',
-                                'The user has been Actived.',
-                                'success'
-                            ).then(() => {
-                                location.reload(); // Reload the page to reflect changes
-                            });
-                        } else {
-                            // Show error SweetAlert
-                            Swal.fire(
-                                'Error!',
-                                'Failed to block the user. Please try again.',
-                                'error'
-                            );
-                        }
-                    },
-                    error: function() {
-                        Swal.fire(
-                            'Error!',
-                            'There was an error processing your request.',
-                            'error'
-                        );
-                    }
-                });
-            }
-        });
-    });
-
-
-
-// Delete button click event
-$('.delete-btn').on('click', function() {
-    var serviceId = $(this).data('id');  // Get service ID
-
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "This action cannot be undone!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'Cancel'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '<?= base_url("delete") ?>', // Your delete URL
-                type: 'POST',
-                data: { id: serviceId },
-                success: function(response) {
-                    var res = JSON.parse(response);
-                    
-                    if (res.success) {
-                        Swal.fire(
-                            'Deleted!',
-                            'The service has been deleted.',
-                            'success'
-                        ).then(() => {
-                            location.reload(); // Reload the table after delete
-                        });
-                    } else {
-                        Swal.fire(
-                            'Error!',
-                            res.message || 'Failed to delete the service. Please try again.',
-                            'error'
-                        );
-                    }
-                },
-                error: function() {
-                    Swal.fire(
-                        'Error!',
-                        'Something went wrong while deleting.',
-                        'error'
-                    );
-                }
-            });
-        }
-    });
 });
-
-
-
-
-});
-
-
-
-
-
-
 </script>

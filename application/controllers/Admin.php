@@ -49,7 +49,7 @@ public function index()
                 'dashboard' => 'Dashboard',
                 'path' => 'General/Dashboard',
                 'content'=>'',
-                 'container'=>'1',
+                 'container'=>'0',
                 'include'=> 'card',
                 'user_count'=>$user_count,
                 'orders_count'=>$orders_count,
