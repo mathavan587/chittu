@@ -133,61 +133,146 @@
   <p class="text-gray-600 mt-1">Click to open import form</p>
 </button>
 
+
+
+
+
+<div id="formCard" class="max-w-4xl mx-auto mt-6 hidden">
+    <!-- <h2 class="text-2xl font-bold text-gray-800 mb-6">📦 Import SMM Services</h2> -->
+
+     <!-- Tab Content: Import Services -->
+     <form id="importForm" class="bg-white p-6 rounded-lg shadow-md">
+    <h2 class="text-xl font-semibold mb-4 text-gray-800">Import SMM Services</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Row 1 -->
+        <div>
+            <label for="api" class="block text-sm font-medium text-gray-700">API URL</label>
+            <input type="text" name="api" id="api" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+        </div>
+
+        <div>
+            <label for="key" class="block text-sm font-medium text-gray-700">API Key</label>
+            <input type="text" name="key" id="key" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+        </div>
+
+        <!-- Row 2 -->
+        <div>
+            <label for="cname" class="block text-sm font-medium text-gray-700">Connection Name</label>
+            <input type="text" name="cname" id="cname" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+        </div>
+
+        <div>
+            <label for="percentage" class="block text-sm font-medium text-gray-700">Percentage</label>
+            <input type="text" name="percentage" value="10" id="percentage" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
+        </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="mt-6">
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
+            Import Services
+        </button>
+    </div>
+</form>
+  
+
+        </div>
+
     
-
+<?php // print_r($services_import); ?>
 <!-- Services Table -->
-<table id="myTable" class="w-full text-sm mt-5 text-left text-gray-700 bg-white shadow-md sm:rounded-lg">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                    <th>S/no</th>
-                    <th>Service ID</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Percentage</th>
-                    <th>Rate</th>
-                    <th>Display Rate</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php $i = 0; foreach($services as $service) { $i++; 
-                    $apimodel = new Apimodel();
-                    $apimodel->tablename = 'categories';
-                    $getdata = $apimodel->getSingleData(['id' => $service->category], ['categories', 'percentage']);
-                ?>
-                <tr>
-                    <td><?= $i ?></td>
-                    <td><?= $service->service_id ?></td>
-                    <td><?= $service->name ?></td>
-                    <td><?= $getdata->categories ?></td>
-                    <td><?= $service->percentage . '%' ?></td>
-                    <td><?= '₹' . $service->rate ?></td>
-                    <td><?= '₹' . $service->set_rate ?></td>
-                    <td>
-                        <div class="flex items-center gap-2">
-                            <button type="button"
-                                class="<?= $service->status ? 'block-btn bg-green-700 hover:bg-green-800' : 'unblock-btn bg-red-700 hover:bg-red-800' ?>
-                                       text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2"
-                                data-id="<?= $service->id ?>">
-                                <i class="<?= $service->status ? 'fas fa-check-circle' : 'fas fa-ban' ?>"></i>
-                            </button>
+ <div class="bg-white p-6 rounded-lg shadow-md  mx-auto mt-10" >
 
-                            <a href="<?= base_url('edit/service/' . $service->id) ?>"
-                               class="bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2">
-                                <i class="fas fa-edit"></i>
-                            </a>
+<table id="myTable" class="w-full  text-sm mt-5 text-left text-gray-700 bg-white  sm:rounded-lg">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+            <th><input type="checkbox" id="selectAll"></th>
+            <th>S/no</th>
+            <th>Service ID</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Percentage</th>
+            <th>Rate</th>
+            <th>Display Rate</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php  
+        $i = 0; 
+        foreach($services_import as $service) { 
+            $i++; 
+            $apimodel = new Apimodel();
+            $apimodel->tablename = 'categories_import';
+            $getdata = $apimodel->getSingleData(['id' => $service->category], ['categories', 'percentage']);
+        ?>
+        <tr>
+            <td><input type="checkbox" class="rowCheckbox" value="<?= $service->id ?>"></td>
+            <td><?= $i ?></td>
+            <td><?= $service->service_id ?></td>
+            <td><?= $service->name ?></td>
+            <td><?= $service->category ?></td>
+            <td><?= $service->percentage . '%' ?></td>
+            <td><?= '₹' . $service->rate ?></td>
+            <td><?= '₹' . $service->set_rate ?></td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>
 
-                            <button type="button"
-                                class="delete-btn bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2"
-                                data-id="<?= $service->id ?>">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </td>   
-                </tr>
-                <?php } ?>
-            </tbody>
-        </table>
+</div>
+<!-- Submit Button -->
+<button id="submitSelected" class="bg-blue-600 text-white px-4 py-2 rounded-lg mt-4">
+    Submit Selected
+</button>
+
+<!-- jQuery Script -->
+<script>
+$(document).ready(function(){
+    // Toggle all checkboxes
+    $('#selectAll').on('click', function() {
+        $('.rowCheckbox').prop('checked', this.checked);
+    });
+
+    // Toggle Select All based on individual checkbox
+    $('.rowCheckbox').on('click', function() {
+        if (!$(this).prop('checked')) {
+            $('#selectAll').prop('checked', false);
+        } else if ($('.rowCheckbox:checked').length === $('.rowCheckbox').length) {
+            $('#selectAll').prop('checked', true);
+        }
+    });
+
+    // Handle Submit
+    $('#submitSelected').click(function(){
+        let selected = [];
+
+        $('.rowCheckbox:checked').each(function(){
+            selected.push($(this).val());
+        });
+
+        if (selected.length === 0) {
+            alert('Please select at least one service.');
+            return;
+        }
+
+        $.ajax({
+            url: '<?= base_url("SmmController/submit_selected_services") ?>',
+            type: 'POST',
+            data: {service_ids: selected},
+            success: function(response) {
+                console.log(response);
+                
+                // alert('Selected services submitted successfully!');
+                // location.reload(); // Reload the page or update table
+            },
+            error: function(xhr, status, error) {
+                alert('An error occurred: ' + error);
+            }
+        });
+    });
+});
+</script>
 
 </div>
     
@@ -201,47 +286,7 @@
 
 
 
-    <div id="formCard" class="max-w-4xl mx-auto mt-6 hidden">
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">📦 Import SMM Services</h2>
 
-     <!-- Tab Content: Import Services -->
-     <form id="importForm" class="bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
-        <h2 class="text-xl font-semibold mb-4 text-gray-800">Import SMM Services</h2>
-        
-        <div class="mb-4">
-            <label for="api" class="block text-sm font-medium text-gray-700">API URL</label>
-            <input type="text" name="api" id="api" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="key" class="block text-sm font-medium text-gray-700">API Key</label>
-            <input type="text" name="key" id="key" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="cname" class="block text-sm font-medium text-gray-700">Connection Name</label>
-            <input type="text" name="cname" id="cname" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
-        </div>
-
-        <div class="mb-4">
-            <label for="percentage" class="block text-sm font-medium text-gray-700">Percentage</label>
-            <input type="text" name="percentage" id="percentage" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
-        </div>
-
-        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
-            Import Services
-        </button>
-    </form>
-  
-    
-
-
-
-      
-
-
-
-        </div>
 
     <!-- Tab + Table + Action Script -->
     <script>
@@ -346,8 +391,9 @@ $(document).ready(function () {
         let api = $('#api').val().trim();
         let key = $('#key').val().trim();
         let cname = $('#cname').val().trim();
+        let percentage = $('#percentage').val().trim();
 
-        if (api === '' || key === '' || cname === '') {
+        if (api === '' || key === '' || cname === '' || percentage === '') {
             Swal.fire('Validation Error', 'Please fill in all the fields.', 'error');
             return;
         }
@@ -374,7 +420,8 @@ $(document).ready(function () {
             data: {
                 api: api,
                 key: key,
-                cname: cname
+                cname: cname,
+                percentage: percentage
             },
             success: function (response) {
                 // console.log(response);
@@ -382,6 +429,7 @@ $(document).ready(function () {
                 Swal.fire('Success', 'Services imported successfully!', 'success');
                 // Optionally reset form
                 $('#importForm')[0].reset();
+                location.reload();
             },
             error: function (xhr) {
                 Swal.fire('Error', 'Failed to import services.', 'error');

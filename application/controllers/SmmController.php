@@ -30,57 +30,7 @@ class SmmController extends CI_Controller
         
             // Otherwise, continue
         }
-    // public function importServices()
-    // {
-    //     $api_url = 'https://www.cheapsmmhub.com/api/v2';
-    //     $api_key = '4c514bc5d240393a9f4f357d132aea17ce59937c';
  
-    //     $post_fields = [
-    //         'key' => $api_key,
-    //         'action' => 'services'
-    //     ];
-
-    //     $ch = curl_init();
-    //     curl_setopt($ch, CURLOPT_URL, $api_url);
-    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    //     curl_setopt($ch, CURLOPT_POST, true);
-    //     curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
-
-    //     $result = curl_exec($ch);
-    //     curl_close($ch);
-
-    //     $services = json_decode($result, true);
-
-    //     if (is_array($services)) {
-    //         $serviceModel = new ServiceModel();
-
-    //         foreach ($services as $service) {
-    //             $data = [
-    //                 'service_id' => $service['service'],
-    //                 'name'       => $service['name'],
-    //                 'category'   => $service['category'],
-    //                 'rate'       => $service['rate'],
-    //                 'min'        => $service['min'],
-    //                 'max'        => $service['max'],
-    //                 'type'       => $service['type'],
-    //                 'desc'       => $service['desc'] ?? null
-    //             ];
-
-    //             // Check if the service exists
-    //             $existing = $serviceModel->where('service_id', $service['service'])->first();
-
-    //             if ($existing) {
-    //                 $serviceModel->update($existing['id'], $data);
-    //             } else {
-    //                 $serviceModel->insert($data);
-    //             }
-    //         }
-
-    //         return $this->response->setJSON(['status' => 'success', 'message' => 'Services imported successfully.']);
-    //     } else {
-    //         return $this->response->setJSON(['status' => 'error', 'message' => 'Invalid API response.']);
-    //     }
-    // }
     public function importServices()
     {
         $this->check_session();
@@ -88,8 +38,8 @@ class SmmController extends CI_Controller
         $api_key=$this->input->post('key');
         $cname=$this->input->post('cname');
         $per=$this->input->post('percentage');
-        // $api_url = 'https://www.cheapsmmhub.com/api/v2';
-        // $api_key = '4c514bc5d240393a9f4f357d132aea17ce59937c';
+
+
     
         $post_fields = [    
             'key'    => $api_key,
@@ -158,44 +108,98 @@ class SmmController extends CI_Controller
                 ];
                 // var_dump($data);                                                                                
                  
-                log_message('debug',json_encode($data));
+                // log_message('debug',json_encode($data));
 
                 $result=$apimodel->insertData($data);
                 
             }
 
-        $categories = array_keys($grouped);
+        // $categories = array_keys($grouped);
 
-                // print_r($categories);
+        //         // print_r($categories);
             
-                foreach ($categories as $category) {
-                    $data = [
-                        'categories' => $category,
-                        'percentage'       => $per
-                    ];
-                    $apimodel->tablename = 'categories_import';
-                    $result=$apimodel->insertData($data);
-                    $getid=array('id'=>$result);
-                    $getdata=$apimodel->getSingleData($getid);
-                    $apimodel->tablename = 'services_import';
-                    $updateda=array(
-                        'category'=>$getdata->categories
-                    );
-                    $updateda1=array(
-                        'category'=>$result
-                    );
-                    $apimodel->updateData($updateda,$updateda1);
-    }
+        //         foreach ($categories as $category) {
+        //             $data = [
+        //                 'categories' => $category,
+        //                 'percentage'       => $per
+        //             ];
+        //             $apimodel->tablename = 'categories_import';
+        //             $result=$apimodel->insertData($data);
+        //             $getid=array('id'=>$result);
+        //             $getdata=$apimodel->getSingleData($getid);
+        //             $apimodel->tablename = 'services_import';
+        //             $updateda=array(
+        //                 'category'=>$getdata->categories
+        //             );
+        //             $updateda1=array(
+        //                 'category'=>$result
+        //             );
+        //             $apimodel->updateData($updateda,$updateda1);
+    // }
 
             
 
 
                                 //    log_message('debug',json_encode($result));
 
-        $result=$apimodel->insertData($data);
+        // $result=$apimodel->insertData($data);
  echo $result;
 
 
+        }
+ 
+
+        public function submit_selected_services(){
+            $ids=$this->input->post('service_ids');
+            $per=$this->input->post('percentage');
+            // print_r($ids);
+            foreach ($ids as $id) {
+            // echo $id; //use getsigledata to get the data from the table
+            $apimodel = new Apimodel();
+
+            $apimodel->tablename = 'services_import';
+            $getid=array('id'=>$id);
+            $service=$apimodel->getSingleData($getid);
+            print_r($getdata);
+
+
+
+            $set=($service->rate*$per)/100;
+            $set_rate=$service->rate+$set;
+            $data = [
+                                'service_id' => $service->service,
+                                'name'       => $service->name,
+                                'category'   => $service->category,
+                                'percentage'       => $per,
+                                'cname'       => $cname,
+                                'rate'       => $service->rate,
+                                'set_rate'       => $set_rate,
+                                'min'        => $service->min,
+                                'max'        => $service->max,
+                                'type'       => $service->type,
+                                'desc'       => $service->desc ?? null
+            ];
+            // var_dump($data);                                                                                
+             
+            // log_message('debug',json_encode($data));
+
+            $result=$apimodel->insertData($data);
+
+
+            // $apimodel->tablename = 'services';
+            // $updateda=array(
+            //     'status'=>1
+            // );
+            // $updateda1=array(
+            //     'status'=>1
+            // );
+            // $apimodel->updateData($updateda,$updateda1);
+            // $apimodel->tablename = 'services_import';
+            // $updateda=array(
+            //     'status'=>1
+        
+            }
+            
         }
 
         public function importServices_view()

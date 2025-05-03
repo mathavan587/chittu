@@ -75,18 +75,7 @@ public function index()
                             $user_count = count($apimodel->getMultipleData($condition,$select));
                             $select=array('id','name','email','mobile','status','usertype','created_at');
                             $users = $apimodel->getMultipleData($condition,$select);
-                            // $apimodel->tablename = 'orders';
-                            // $select=array('id');
-                            // $condition=array('is_deleted'=>'0');
-                            // $orders_count = count($apimodel->getMultipleData($condition,$select));
-                            // $apimodel->tablename = 'services';
-                            // $select=array('id');
-                            // $condition=array('is_deleted'=>'0');
-                            // $services_count = count($apimodel->getMultipleData($condition,$select));
-                            // $apimodel->tablename = 'categories';
-                            // $select='*';
-                            // $condition='';
-                            // $categories_count = count($apimodel->getMultipleData($condition,$select));
+                         
                             $data=[
                             'dashboard' => 'Users',
                             'path' => 'General/Users',
@@ -111,25 +100,21 @@ public function index()
                                         $this->check_session();
                         
                                         $apimodel = new Apimodel();
-                                        // $apimodel->tablename = 'users';
-                                        // $select=array('id');
-                                        // $condition=array('is_deleted'=>'0','usertype'=>'user');
-                                        // $user_count = count($apimodel->getMultipleData($condition,$select));
-                                        // $select=array('id','name','email','mobile','status','usertype','created_at');
-                                        // $users = $apimodel->getMultipleData($condition,$select);
-                                        // $apimodel->tablename = 'orders';
-                                        // $select=array('id');
-                                        // $condition=array('is_deleted'=>'0');
-                                        // $orders_count = count($apimodel->getMultipleData($condition,$select));
+                                    
                                         $apimodel->tablename = 'services';
-                                        $select=array('id', 'service_id', 'name', 'category', 'rate', 'set_rate', 'min', 'max', 'type', 'desc');
+                                        $select=array('id', 'service_id', 'name', 'category', 'rate', 'set_rate','percentage', 'min', 'max', 'type', 'desc');
                                         $condition=array('is_deleted'=>'0');
                                         $services_count = count($apimodel->getMultipleData($condition,$select));
                                         $services = $apimodel->getMultipleData($condition,$select);
-                                        // $apimodel->tablename = 'categories';
-                                        // $select='*';
-                                        // $condition='';
-                                        // $categories_count = count($apimodel->getMultipleData($condition,$select));
+
+
+                                        
+                                        $apimodel->tablename = 'services_import';
+                                        $select=array('id', 'service_id', 'name', 'category', 'rate', 'set_rate','percentage', 'min', 'max', 'type', 'desc');
+                                        $condition=array('is_deleted'=>'0');
+                                        $services_count = count($apimodel->getMultipleData($condition,$select));
+                                        $services_import = $apimodel->getMultipleData($condition,$select);
+                              
                                         $data=[
                                         'dashboard' => 'Services',
                                         'path' => 'General/Services',
@@ -138,7 +123,8 @@ public function index()
                                         'container'=>'0',
                                         'include'=> 'Services',
                                         'services_count'=>$services_count,
-                                        'services'=>$services
+                                        'services'=>$services,
+                                        'services_import'=>$services_import
                                      ];
                                     
                                         $this->load->view('admin/include/header',$data);
@@ -331,7 +317,7 @@ public function editService($id)
 
     public function import(){
         $data=[
-            'dashboard' => 'Services',
+            'dashboard' => 'Services    ',
             'path' => 'Services/Import',
             'content'=>'0',
             'include'=> 'Services_import',
