@@ -86,6 +86,8 @@ class SmmController extends CI_Controller
         $this->check_session();
         $api_url=$this->input->post('api');
         $api_key=$this->input->post('key');
+        $cname=$this->input->post('cname');
+        $per=$this->input->post('percentage');
         // $api_url = 'https://www.cheapsmmhub.com/api/v2';
         // $api_key = '4c514bc5d240393a9f4f357d132aea17ce59937c';
     
@@ -97,7 +99,8 @@ class SmmController extends CI_Controller
 
         $data = [
             'api_url' => $api_url,
-            'api_key'       => $api_key
+            'api_key'       => $api_key,
+            'cname'       => $cname
         ];
 
         $apimodel = new Apimodel();
@@ -131,21 +134,21 @@ class SmmController extends CI_Controller
         $grouped = [];
     $i=0;
             //    $r=array($services); 
-
-
+            $apimodel = new Apimodel();
+            $apimodel->tablename = 'services_import';
+            $per=$this->input->post('percentage');
             foreach ($services as $service) {
                 $i++;
                 $category = $service['category'];
                 $grouped[$category][] = $service;
-                $apimodel = new Apimodel();
-                $apimodel->tablename = 'services';
-                $per=20;
-               $set=($service['rate']*$per)/100;
-               $set_rate=$service['rate']+$set;
+                $set=($service['rate']*$per)/100;
+                $set_rate=$service['rate']+$set;
                 $data = [
                                     'service_id' => $service['service'],
                                     'name'       => $service['name'],
                                     'category'   => $service['category'],
+                                    'percentage'       => $per,
+                                    'cname'       => $cname,
                                     'rate'       => $service['rate'],
                                     'set_rate'       => $set_rate,
                                     'min'        => $service['min'],
@@ -154,7 +157,9 @@ class SmmController extends CI_Controller
                                     'desc'       => $service['desc'] ?? null
                 ];
                 // var_dump($data);                                                                                
-                                
+                 
+                log_message('debug',json_encode($data));
+
                 $result=$apimodel->insertData($data);
                 
             }
@@ -166,14 +171,13 @@ class SmmController extends CI_Controller
                 foreach ($categories as $category) {
                     $data = [
                         'categories' => $category,
-                        'percentage' => '10'
+                        'percentage'       => $per
                     ];
-                    $apimodel = new Apimodel();
-                    $apimodel->tablename = 'categories';
+                    $apimodel->tablename = 'categories_import';
                     $result=$apimodel->insertData($data);
                     $getid=array('id'=>$result);
                     $getdata=$apimodel->getSingleData($getid);
-                    $apimodel->tablename = 'services';
+                    $apimodel->tablename = 'services_import';
                     $updateda=array(
                         'category'=>$getdata->categories
                     );
