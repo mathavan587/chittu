@@ -290,4 +290,13 @@ public function getMultipleDataJoin2($joins, $select, $condition) {
  
 
 
+    public function getGroupedCategories($data)
+{
+    $row=$data['row'];
+    $this->db->select($row.', COUNT(*) as total_'.$row);
+    $this->db->from($this->tablename);
+    $this->db->group_by($row);
+    return $this->db->get()->result();
+}
+
 }

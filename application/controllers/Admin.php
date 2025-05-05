@@ -106,15 +106,18 @@ public function index()
                                         $condition=array('is_deleted'=>'0');
                                         $services_count = count($apimodel->getMultipleData($condition,$select));
                                         $services = $apimodel->getMultipleData($condition,$select);
-
-
-                                        
+ 
                                         $apimodel->tablename = 'services_import';
-                                        $select=array('id', 'service_id', 'name', 'category', 'rate', 'set_rate','percentage', 'min', 'max', 'type', 'desc');
-                                        $condition=array('is_deleted'=>'0');
+                                        $select=array('id', 'service_id', 'name', 'category', 'rate', 'set_rate','percentage', 'min', 'max', 'type', 'desc' ,'imported');
                                         $services_count = count($apimodel->getMultipleData($condition,$select));
                                         $services_import = $apimodel->getMultipleData($condition,$select);
                               
+                                        $apimodel->tablename = 'services_import';
+                                        $data=[
+                                            'row'=>'cname'
+                                        ];
+                                        $cname = $apimodel->getGroupedCategories($data);
+//  log_message('debug',json_encode($cname));
                                         $data=[
                                         'dashboard' => 'Services',
                                         'path' => 'General/Services',
@@ -124,6 +127,7 @@ public function index()
                                         'include'=> 'Services',
                                         'services_count'=>$services_count,
                                         'services'=>$services,
+                                        'cname'=>$cname,
                                         'services_import'=>$services_import
                                      ];
                                     
@@ -315,6 +319,28 @@ public function editService($id)
 
 
 
+
+
+
+
+    public function import_delete()
+    {
+
+        $ids=$this->input->post('service_ids');
+        $this->check_session();
+        $apimodel = new Apimodel();
+            $apimodel->tablename = 'services_import';  
+        foreach ($ids as  $id) {
+        $data=[
+            'id'=>$id
+        ];
+            $apimodel->deleteData($data);
+        }
+
+    }
+
+
+
     public function import(){
         $data=[
             'dashboard' => 'Services    ',
@@ -334,10 +360,12 @@ public function editService($id)
     
                     $apimodel = new Apimodel();
                     
-                    $apimodel->tablename = 'categories';
-                    $select='*';
-                    $condition=array('is_deleted'=>'0');
-                    $categories = $apimodel->getMultipleData($condition,$select);
+                    $apimodel->tablename = 'services';
+                    $data=[
+                        'row'=>'category'
+                    ];
+                    $categories = $apimodel->getGroupedCategories($data);
+                    // log_message('debug',json_encode($categories));
                     $data=[
                     'dashboard' => 'Categories',
                     'path' => 'General/Categories',
@@ -353,6 +381,33 @@ public function editService($id)
                     $this->load->view('admin/include/footer');
                 }    
 
+                public function providers()
+                {
+                                $this->check_session();
+                
+                                $apimodel = new Apimodel();
+                                
+                                $apimodel->tablename = 'services';
+                                $data=[
+                                    'row'=>'cname'
+                                ];
+                                $providers = $apimodel->getGroupedCategories($data);
+                                // log_message('debug',json_encode($providers));
+                                $data=[
+                                'dashboard' => 'Providers',
+                                'path' => 'General/Providers',
+                                'content'=>'',
+                                 'container'=>'1',
+                                'container'=>'0',
+                                'include'=> 'providers',
+                                'providers'=>$providers
+                             ];
+                            
+                                $this->load->view('admin/include/header',$data);
+                                $this->load->view('admin/body');
+                                $this->load->view('admin/include/footer');
+                            }    
+            
                 public function delete_categorie() 
                  {
 
@@ -444,4 +499,69 @@ public function editService($id)
                 }
 
             }
+            public function categoryupdate(){
+                // print_r($_REQUEST);
+                $categories = $this->input->post('category');
+                $oldcategories = $this->input->post('oldcategory');
+
+
+                $data = array(
+                    'category' => $categories,
+                );
+                $condition=array(
+                   'category' => $oldcategories,
+                );
+                // print_r($condition);
+    
+                
+            //     // Update service in the database using the model
+            //     // $result = $this->ServiceModel->update_service($id, $data);
+                $apimodel = new Apimodel();
+               $apimodel->tablename = 'services';
+                $result = $apimodel->updateData($condition, $data);
+                // log_message('debug',json_encode($result));
+               
+            }
+
+
+
+
+
+            public function providerupdate(){
+                // print_r($_REQUEST);
+                $categories = $this->input->post('category');
+                $oldcategories = $this->input->post('oldcategory');
+
+
+                $data = array(
+                    'cname' => $categories,
+                );
+                $condition=array(
+                   'cname' => $oldcategories,
+                );
+                // print_r($condition);
+    
+                
+            //     // Update service in the database using the model
+            //     // $result = $this->ServiceModel->update_service($id, $data);
+                $apimodel = new Apimodel();
+               $apimodel->tablename = 'services';
+                $result = $apimodel->updateData($condition, $data);
+                // log_message('debug',json_encode($result));
+               
+            }
+
+            public function filter_category() {
+                $cname = $this->input->post('category');
+                $apimodel = new Apimodel();
+                $apimodel->tablename = 'services_import';
+                $data=[
+                    'cname'=>$cname
+                ];
+                $data['services_import'] = $apimodel->getMultipleData($data); // Adjust to your DB logic
+                // print_r($data);
+                log_message('debug',json_encode($data));
+                $this->load->view('services_table', $data); // View will only contain the table
+            }
+            
 		}

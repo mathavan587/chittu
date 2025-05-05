@@ -84,9 +84,10 @@ class SmmController extends CI_Controller
         $grouped = [];
     $i=0;
             //    $r=array($services); 
-            $apimodel = new Apimodel();
-            $apimodel->tablename = 'services_import';
+          
             $per=$this->input->post('percentage');
+    
+
             foreach ($services as $service) {
                 $i++;
                 $category = $service['category'];
@@ -110,6 +111,9 @@ class SmmController extends CI_Controller
                  
                 // log_message('debug',json_encode($data));
 
+
+                $apimodel = new Apimodel();
+                $apimodel->tablename = 'services_import';      
                 $result=$apimodel->insertData($data);
                 
             }
@@ -150,24 +154,33 @@ class SmmController extends CI_Controller
  
 
         public function submit_selected_services(){
+            // log_message('debug',json_encode('submit_selected_services'));
             $ids=$this->input->post('service_ids');
             $per=$this->input->post('percentage');
-            // print_r($ids);
+            $cname=$this->input->post('cname');
+            echo $cname;
             foreach ($ids as $id) {
+
             // echo $id; //use getsigledata to get the data from the table
+            
             $apimodel = new Apimodel();
-
             $apimodel->tablename = 'services_import';
-            $getid=array('id'=>$id);
+            $condition = [
+                'id' => $id,
+                'imported' => '0'
+            ];
+            $service=$apimodel->getSingleData($condition);
+            // log_message('debug',json_encode($service));
+            if ($service) {
             $service=$apimodel->getSingleData($getid);
-            print_r($getdata);
-
-
-
             $set=($service->rate*$per)/100;
             $set_rate=$service->rate+$set;
+
+
+            // print_r($service);
+
             $data = [
-                                'service_id' => $service->service,
+                                'service_id' => $service->service_id,
                                 'name'       => $service->name,
                                 'category'   => $service->category,
                                 'percentage'       => $per,
@@ -180,26 +193,28 @@ class SmmController extends CI_Controller
                                 'desc'       => $service->desc ?? null
             ];
             // var_dump($data);                                                                                
-             
-            // log_message('debug',json_encode($data));
-
-            $result=$apimodel->insertData($data);
-
-
-            // $apimodel->tablename = 'services';
-            // $updateda=array(
-            //     'status'=>1
-            // );
-            // $updateda1=array(
-            //     'status'=>1
-            // );
-            // $apimodel->updateData($updateda,$updateda1);
-            // $apimodel->tablename = 'services_import';
-            // $updateda=array(
-            //     'status'=>1
-        
-            }
             
+            $apimodel = new Apimodel();
+            $apimodel->tablename = 'services';
+            $result=$apimodel->insertData($data);
+            echo $result;
+
+            $apimodel->tablename = 'services_import';
+            $condition=array(
+                'id'=>$id
+            );
+            $data=array(
+                'imported'=>1
+            );
+            $services_import=$apimodel->updateData($condition,$data);
+            
+            echo  1; 
+        
+        }else {
+          echo  0; 
+        }
+            
+            }    
         }
 
         public function importServices_view()

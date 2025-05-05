@@ -91,3 +91,4 @@ $route['categorie/delete'] = 'Admin/delete_categorie';
 $route['editcategories'] = 'Admin/editcategories';
 $route['import'] = 'Admin/import';
 $route['categories'] = 'Admin/categories';
+$route['providers'] = 'Admin/providers';

@@ -45,7 +45,7 @@
             <!-- <li class="me-2">
                 <a href="#settings"
                    class="tab-link inline-block p-4 border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300"
-                   data-tab="settings">Settings</a>
+                   data-tab="settings">rovider</a>
             </li> -->
         </ul>
     </div>
@@ -54,12 +54,12 @@
     <div id="all-services" class="tab-content">
         <!-- Import Button -->
         
-        <div class="py-2 w-10 mb-4">
+        <!-- <div class="py-2 w-10 mb-4">
             <a href="<?= base_url('import') ?>"
                class="bg-blue-700 text-center  hover:bg-blue-800 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2">
                 <i class="fas fa-upload"></i>
             </a>
-        </div>
+        </div> -->
 
         <!-- Services Table -->
         <table id="myTable" class="w-full text-sm text-left text-gray-700 bg-white shadow-md sm:rounded-lg">
@@ -85,8 +85,8 @@
                     <td><?= $i ?></td>
                     <td><?= $service->service_id ?></td>
                     <td><?= $service->name ?></td>
-                    <td><?= $getdata->categories ?></td>
-                    <td><?= $getdata->percentage . '%' ?></td>
+                    <td><?= $service->category ?></td>
+                    <td><?= $service->percentage . '%' ?></td>
                     <td><?= '₹' . $service->rate ?></td>
                     <td><?= '₹' . $service->set_rate ?></td>
                     <td>
@@ -121,20 +121,27 @@
         <!-- <p class="text-gray-600">List of inactive services will be shown here.</p> -->
 
 
-        
-
-       
 
 
+    <button onclick="toggleFormCard()" class="bg-white shadow hover:shadow-md p-6 rounded-lg border border-gray-200 text-left w-full max-w-md mx-auto mt-10 ml-3">
+  <h3 class="text-xl font-semibold text-gray-800">+ Import SMM Services</h3>
+  <!-- <p class="text-gray-600 mt-1">Click to open import form</p> -->
+</button>
+ 
 
+<select id="categorySelect" class=" text-xl font-semibold text-gray-800 bg-white shadow hover:shadow-md p-6 rounded-lg border border-gray-200 text-left w-full max-w-md mx-auto mt-10">
+<option selected >Choose Option</option>
+<?php
+foreach($cname as $cname){
+?>
+<option value="<?=$cname->cname?>"><?=$cname->cname?></option>
+<?php } ?>
+</select>
 
-    <button onclick="toggleFormCard()" class="bg-white shadow hover:shadow-md p-6 rounded-lg border border-gray-200 text-left w-full max-w-md mx-auto mt-10">
+<!-- <button onclick="toggleFormCard()" class="bg-white shadow hover:shadow-md p-6 rounded-lg border border-gray-200 text-left w-full max-w-md mx-auto mt-10">
   <h3 class="text-xl font-semibold text-gray-800">+ Import SMM Services</h3>
   <p class="text-gray-600 mt-1">Click to open import form</p>
-</button>
-
-
-
+</button> -->
 
 
 <div id="formCard" class="max-w-4xl mx-auto mt-6 hidden">
@@ -166,10 +173,10 @@
             <label for="percentage" class="block text-sm font-medium text-gray-700">Percentage</label>
             <input type="text" name="percentage" value="10" id="percentage" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm" required>
         </div>
-    </div>
 
+    </div>
     <!-- Row 3 -->
-    <div class="mt-6">
+        <div class="mt-6">
         <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
             Import Services
         </button>
@@ -182,48 +189,18 @@
     
 <?php // print_r($services_import); ?>
 <!-- Services Table -->
- <div class="bg-white p-6 rounded-lg shadow-md  mx-auto mt-10" >
+<div id="filteredTable" class="bg-white p-6 rounded-lg shadow-md mx-auto mt-10 h-[250px] overflow-y-auto">
 
-<table id="myTable" class="w-full  text-sm mt-5 text-left text-gray-700 bg-white  sm:rounded-lg">
-    <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-        <tr>
-            <th><input type="checkbox" id="selectAll"></th>
-            <th>S/no</th>
-            <th>Service ID</th>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Percentage</th>
-            <th>Rate</th>
-            <th>Display Rate</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php  
-        $i = 0; 
-        foreach($services_import as $service) { 
-            $i++; 
-            $apimodel = new Apimodel();
-            $apimodel->tablename = 'categories_import';
-            $getdata = $apimodel->getSingleData(['id' => $service->category], ['categories', 'percentage']);
-        ?>
-        <tr>
-            <td><input type="checkbox" class="rowCheckbox" value="<?= $service->id ?>"></td>
-            <td><?= $i ?></td>
-            <td><?= $service->service_id ?></td>
-            <td><?= $service->name ?></td>
-            <td><?= $service->category ?></td>
-            <td><?= $service->percentage . '%' ?></td>
-            <td><?= '₹' . $service->rate ?></td>
-            <td><?= '₹' . $service->set_rate ?></td>
-        </tr>
-        <?php } ?>
-    </tbody>
-</table>
+
 
 </div>
 <!-- Submit Button -->
 <button id="submitSelected" class="bg-blue-600 text-white px-4 py-2 rounded-lg mt-4">
     Submit Selected
+</button>
+
+<button id="DeleteSelected" class="bg-blue-600 text-white px-4 py-2 rounded-lg mt-4">
+    Delete
 </button>
 
 <!-- jQuery Script -->
@@ -255,23 +232,126 @@ $(document).ready(function(){
             alert('Please select at least one service.');
             return;
         }
+        var  percentage=$('#percentage1').val();
+        var  cname=$('#categorySelect').val();
 
         $.ajax({
             url: '<?= base_url("SmmController/submit_selected_services") ?>',
             type: 'POST',
-            data: {service_ids: selected},
+            data: {service_ids: selected, percentage: percentage, cname:cname },
             success: function(response) {
                 console.log(response);
                 
-                // alert('Selected services submitted successfully!');
-                // location.reload(); // Reload the page or update table
+                if (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Imported successfully!',
+                }).then(() => {
+                    location.reload(); // Reload after confirmation
+                });
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Notice',
+                    text: 'Already imported!',
+                });
+            }
             },
             error: function(xhr, status, error) {
                 alert('An error occurred: ' + error);
             }
         });
     });
+
+
+
+
+    $('#categorySelect').on('change', function() {
+        var category = $(this).val();
+        console.log('Selected category:', category); // Optional for debug
+
+        if (!category) {
+            $('#filteredTable').html('');
+            return;
+        }
+
+        $.ajax({
+            url: '<?= base_url("admin/filter_category") ?>',
+            type: 'POST',
+            data: { category: category },
+            success: function(response) {
+                $('#filteredTable').html(response);
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', error);
+            }
+        });
+    });
+
+
+      // Handle Delete
+$('#DeleteSelected').click(function () {
+    let selected = [];
+
+    $('.rowCheckbox:checked').each(function () {
+        selected.push($(this).val());
+    });
+
+    if (selected.length === 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'No Services Selected',
+            text: 'Please select at least one service to delete.',
+        });
+        return;
+    }
+
+    // Optional confirmation before delete
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "Selected services will be deleted!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete them!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '<?= base_url("admin/import_delete") ?>',
+                type: 'POST',
+                data: { service_ids: selected },
+                success: function (response) {
+                    if (response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'Selected services have been deleted.',
+                        }).then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Notice',
+                            text: 'Nothing was deleted (maybe already deleted).',
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred: ' + error,
+                    });
+                }
+            });
+        }
+    });
 });
+});
+
 </script>
 
 </div>
@@ -279,7 +359,7 @@ $(document).ready(function(){
 
     <!-- Tab Content: Settings -->
     <div id="settings" class="tab-content hidden">
-        <p class="text-gray-600">Settings content goes here.</p>
+        <p class="text-gray-600">provider content goes here.</p>
     </div>
 
 

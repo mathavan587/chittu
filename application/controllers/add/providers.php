@@ -25,14 +25,9 @@
 
 <!-- SweetAlert JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.0/dist/sweetalert2.min.js"></script>
-     <!-- Edit Button -->
-    
-<div class="py-2 w-10">
-
-    
-</div>
-
-<table id="myTable" class="relative overflow-x-auto shadow-md sm:rounded-lg" style="width:100%">
+<!-- Edit Button -->
+<?php  //print_r($providers); ?>
+    <table id="myTable" class="relative overflow-x-auto shadow-md sm:rounded-lg" style="width:100%">
         <thead>
             <tr>
                 <th>S/no</th>
@@ -44,12 +39,14 @@
             </tr>
         </thead>
         <tbody>
-        <?php $i = 0; foreach($categories as $categorie) { $i++; 
+        <?php 
+        
+        $i = 0; foreach($providers as $provider) { $i++; 
                 ?>
                 <tr>
                     <td><?=$i?></td>
-                    <td><?=$categorie->category?></td>
-                    <!-- <td><?=$categorie->percentage.'%'?></td> -->
+                    <td><?=$provider->cname?></td>
+                    <!-- <td><?=$provider->percentage.'%'?></td> -->
                 <td>
                 <div class="flex items-center gap-2">
         <!-- Edit Button -->
@@ -61,8 +58,8 @@
 
 <button type="button"
     class="edit-btn bg-blue-700 hover:bg-blue-800 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2"
-    data-oldcategory="<?=$categorie->category  ?>"
-    data-category="<?= $categorie->category ?>">
+    data-oldcategory="<?=$provider->cname  ?>"
+    data-category="<?= $provider->cname ?>">
     <i class="fas fa-edit"></i>
 </button>
 
@@ -283,11 +280,11 @@ $('.edit-btn').on('click', function () {
         if (result.isConfirmed && result.value) {
             // Perform AJAX update
             $.ajax({
-                url: '<?= base_url("admin/categoryupdate") ?>',
+                url: '<?= base_url("admin/providerupdate") ?>',
                 type: 'POST',
                 data: result.value,
                 success: function (response) {
-                    console.log(response);
+                    // console.log(response);
                     
                     const res = JSON.parse(response);
                     if (res.success) {
