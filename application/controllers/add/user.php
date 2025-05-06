@@ -28,6 +28,10 @@
 
 <div style="width:90%; margin:auto;">
 
+<button id="addUserBtn" class="bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm px-4 py-2 mb-4">
+    <i class="fas fa-user-plus"></i> Add User
+</button>
+
 <table id="myTable" class="display nowrap" style="width:100%">
         <thead>
             <tr>
@@ -35,6 +39,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Mobile</th>
+                <th>Otp</th>
                 <th>Status</th>
                 <th>Date</th>
                 <th>Action</th>
@@ -47,6 +52,7 @@
                     <td><?=$user->name?></td>
                     <td><?=$user->email?></td>
                     <td><?=$user->mobile?></td>
+                    <td><?=$user->otp?></td>
                     <td>
                         <mark class="px-2 text-white
                         <?php 
@@ -62,6 +68,10 @@
                     </td>
                     <td><?= date('d M y', strtotime($user->created_at)) ?></td>
                     <td>
+
+                    <button type="button" class="edit-btn bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm px-3 py-1.5 me-2" data-id="<?=$user->id?>">
+        <i class="fas fa-edit"></i>
+    </button>
                         <button type="button" 
                                 class="
                                 <?php if ($user->status==0) { echo "block-btn"; } else { echo "unblock-btn"; } ?>
@@ -84,6 +94,132 @@
 
 <!-- DataTables Initialization Script -->
 <script>
+
+
+
+$('#addUserBtn').on('click', function () {
+    Swal.fire({
+        title: 'Add New User',
+        html:
+            '<input id="swal-name" class="swal2-input" placeholder="Name">' +
+            '<input id="swal-email" class="swal2-input" placeholder="Email">' +
+            '<input id="swal-mobile" class="swal2-input" placeholder="Mobile">' +
+            '<input id="swal-otp" class="swal2-input" placeholder="OTP">' +
+            '<select id="swal-status" class="swal2-input">' +
+                '<option value="0">Active</option>' +
+                '<option value="1">Inactive</option>' +
+            '</select>',
+        focusConfirm: false,
+        preConfirm: () => {
+            return {
+                name: document.getElementById('swal-name').value,
+                email: document.getElementById('swal-email').value,
+                mobile: document.getElementById('swal-mobile').value,
+                otp: document.getElementById('swal-otp').value,
+                status: document.getElementById('swal-status').value
+            };
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Add User'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '<?= base_url("admin/insert_user") ?>',
+                type: 'POST',
+                data: {
+                    name: result.value.name,
+                    email: result.value.email,
+                    mobile: result.value.mobile,
+                    otp: result.value.otp,
+                    status: result.value.status
+                },
+                success: function (response) {
+                    console.log(response);
+                    let res = JSON.parse(response);
+                    if (res.success) {
+                        Swal.fire('Added!', 'New user has been added.', 'success').then(() => location.reload());
+                    } else {
+                        Swal.fire('Error!', 'Failed to add user.', 'error');
+                    }
+                }
+            });
+        }
+    });
+});
+
+
+
+// Edit button click
+$('.edit-btn').on('click', function() {
+    var userId = $(this).data('id');
+
+    // Fetch user data via AJAX before showing the SweetAlert form
+    $.ajax({
+        url: '<?= base_url("admin/get_user") ?>',
+        type: 'POST',
+        data: { id: userId },
+        success: function(response) {
+            var user = JSON.parse(response);
+
+            Swal.fire({
+                title: 'Edit User',
+                html:
+                    '<input id="swal-name" class="swal2-input" placeholder="Name" value="' + user.name + '">' +
+                    '<input id="swal-email" class="swal2-input" placeholder="Email" value="' + user.email + '">' +
+                    '<input id="swal-mobile" class="swal2-input" placeholder="Mobile" value="' + user.mobile + '">' +
+                    '<input id="swal-otp" class="swal2-input" placeholder="OTP" value="' + user.otp + '">' +
+                    '<select id="swal-status" class="swal2-input">' +
+                        '<option value="0"' + (user.status == 0 ? ' selected' : '') + '>Active</option>' +
+                        '<option value="1"' + (user.status == 1 ? ' selected' : '') + '>Blocked</option>' +
+                    '</select>',
+                focusConfirm: false,
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                preConfirm: () => {
+                    return {
+                        name: document.getElementById('swal-name').value,
+                        email: document.getElementById('swal-email').value,
+                        mobile: document.getElementById('swal-mobile').value,
+                        otp: document.getElementById('swal-otp').value,
+                        status: document.getElementById('swal-status').value
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '<?= base_url("admin/update_user") ?>',
+                        type: 'POST',
+                        data: {
+                            id: userId,
+                            name: result.value.name,
+                            email: result.value.email,
+                            mobile: result.value.mobile,
+                            otp: result.value.otp,
+                            status: result.value.status
+                        },
+                        success: function(response) {
+                            let res = JSON.parse(response);
+                            if (res.success) {
+                                Swal.fire('Updated!', 'User details updated.', 'success').then(() => location.reload());
+                            } else {
+                                Swal.fire('Error!', 'Failed to update user.', 'error');
+                            }
+                        },
+                        error: function() {
+                            Swal.fire('Error!', 'Server error occurred.', 'error');
+                        }
+                    });
+                }
+            });
+        },
+        error: function() {
+            Swal.fire('Error!', 'Failed to fetch user details.', 'error');
+        }
+    });
+});
+
+
+
 $(document).ready(function() {
     // Initialize DataTable
     $('#myTable').DataTable({

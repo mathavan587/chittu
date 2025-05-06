@@ -73,7 +73,7 @@ public function index()
                             $select=array('id');
                             $condition=array('is_deleted'=>'0','usertype'=>'user');
                             $user_count = count($apimodel->getMultipleData($condition,$select));
-                            $select=array('id','name','email','mobile','status','usertype','created_at');
+                            $select=array('id','name','email','mobile','status','otp','usertype','created_at');
                             $users = $apimodel->getMultipleData($condition,$select);
                          
                             $data=[
@@ -93,6 +93,50 @@ public function index()
                         
                         
 
+
+                        public function get_user() {
+                            $id = $this->input->post('id');
+                            $user = $this->db->get_where('users', ['id' => $id])->row();
+                            echo json_encode($user);
+                        }
+                        
+                        public function update_user() {
+                            $id = $this->input->post('id');
+                            $data = [
+                                'name' => $this->input->post('name'),
+                                'email' => $this->input->post('email'),
+                                'mobile' => $this->input->post('mobile'),
+                                'otp' => $this->input->post('otp'),
+                                'status' => $this->input->post('status')
+                            ];
+                            $updated = $this->db->update('users', $data, ['id' => $id]);
+                            echo json_encode(['success' => $updated]);
+                        }
+
+                        public function insert_user() {
+                            
+                            // $data = $this->input->post();
+                            // print_r($data);
+                            $data = [
+                                'name' => $this->input->post('name'),
+                                'email' => $this->input->post('email'),
+                                'mobile' => $this->input->post('mobile'),
+                                'otp' => $this->input->post('otp'),
+                                'status' => $this->input->post('status')
+                            ];
+                        //    print_r($data);
+                            // $apimodel = new Apimodel();
+                            $apimodel = new Apimodel();
+                            $apimodel->tablename = 'users';
+                            $result=$apimodel->insertData($data);
+                        
+                            if ($result) {
+                                echo json_encode(['success' => true]);
+                            } else {
+                                echo json_encode(['success' => false]);
+                            }
+                        }
+                        
 
 
                         public function services()
@@ -222,9 +266,11 @@ public function index()
             $rate = $this->input->post('rate');
             $set_rate = $this->input->post('set_rate');
             $min = $this->input->post('min');
+            $percentage = $this->input->post('percentage');
             $max = $this->input->post('max');
             $type = $this->input->post('type');
             $desc = $this->input->post('desc');
+            $category = $this->input->post('category');
             $status = $this->input->post('status');
             $id = $this->input->post('id'); // the service ID being updated
 
@@ -235,11 +281,13 @@ public function index()
                 'rate' => $rate,
                 'set_rate' => $set_rate,
                 'min' => $min,
+                'category' => $category,
+                'percentage' => $percentage,
                 'max' => $max,
                 'type' => $type,
                 'desc' => $desc,
                 'status' => $status
-            );
+            );  
             $condition=array(
                'id' => $id,
             );
@@ -271,10 +319,15 @@ public function editService($id)
     $apimodel = new Apimodel();
     $apimodel->tablename = 'services';
     $service = $apimodel->getSingleData(array('id' => $id,'status'=>'0','is_deleted'=>'0'),array(`id`, `service_id`, `name`, `category`, `rate`, `set_rate`,`category`,`min`, `max`, `type`, `desc`));
-    $apimodel->tablename = 'categories';
-    $select='*';
-    $condition='';
-    $categories = $apimodel->getMultipleData($condition,$select);
+    // $apimodel->tablename = 'categories';
+    // $select='*';
+    // $condition='';
+    // $categories = $apimodel->getMultipleData($condition,$select);
+    $apimodel->tablename = 'services';
+    $data=[
+        'row'=>'category'
+    ];
+    $categories = $apimodel->getGroupedCategories($data);
     $data=[
         'dashboard' => 'Services',
         'path' => 'Services/Edit',

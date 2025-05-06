@@ -7,13 +7,42 @@
         <input type="text" name="service_id" value="<?= $service->service_id ?>" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
     </div>
     
-    <!-- Service Name -->
-    <div>
+    
+
+
+      <!-- Service Name -->
+      <div>
         <label for="name" class="block text-lg font-medium text-gray-700">Service Name</label>
         <input type="text" name="name" value="<?= $service->name ?>" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
         <!-- <select name="" id=""></select> -->
     </div>
 
+
+    <!-- Service Percentage -->
+    <div>
+        <label for="name" class="block text-lg font-medium text-gray-700">Percentage</label>
+        <input type="text" name="percentage" value="<?= $service->percentage ?>" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+        <!-- <select name="" id=""></select> -->
+    </div>
+
+
+
+     <!-- Service Select -->
+     <div>
+ 
+        <label for="name" class="block text-lg font-medium text-gray-700">Category</label>
+        <!-- <input type="text" name="percentage" value="<?= $service->percentage ?>" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" /> -->
+        <select name="category" id="category" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <?php foreach ($categories as $category) { ?>
+
+        <option
+        
+        <?php if($category->category == $service->category) { ?> selected <?php } ?>
+        
+        value="<?=$category->category?>"><?=$category->category?></option>
+<?php } ?>
+    </select>
+    </div>
 
 
     <!-- Rate -->
