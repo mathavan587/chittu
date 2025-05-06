@@ -117,6 +117,11 @@ public function index()
                                             'row'=>'cname'
                                         ];
                                         $cname = $apimodel->getGroupedCategories($data);
+                                        $apimodel->tablename = 'services_import';
+                                        $data=[
+                                            'row'=>'cname'
+                                        ];
+                                        $cname = $apimodel->getGroupedCategories($data);
 //  log_message('debug',json_encode($cname));
                                         $data=[
                                         'dashboard' => 'Services',

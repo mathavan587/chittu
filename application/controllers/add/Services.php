@@ -185,9 +185,6 @@ foreach($cname as $cname){
   
 
         </div>
-
-    
-<?php // print_r($services_import); ?>
 <!-- Services Table -->
 <div id="filteredTable" class="bg-white p-6 rounded-lg shadow-md mx-auto mt-10 h-[250px] overflow-y-auto">
 
