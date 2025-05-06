@@ -117,12 +117,12 @@ public function index()
                                             'row'=>'cname'
                                         ];
                                         $cname = $apimodel->getGroupedCategories($data);
-                                        $apimodel->tablename = 'services_import';
+                                        $apimodel->tablename = 'services';
                                         $data=[
-                                            'row'=>'cname'
+                                            'row'=>'category'
                                         ];
-                                        $cname = $apimodel->getGroupedCategories($data);
-//  log_message('debug',json_encode($cname));
+                                        $names = $apimodel->getGroupedCategories($data);
+//  log_message('debug',json_encode($names));
                                         $data=[
                                         'dashboard' => 'Services',
                                         'path' => 'General/Services',
@@ -132,6 +132,7 @@ public function index()
                                         'include'=> 'Services',
                                         'services_count'=>$services_count,
                                         'services'=>$services,
+                                        'names'=>$names,
                                         'cname'=>$cname,
                                         'services_import'=>$services_import
                                      ];
@@ -568,5 +569,41 @@ public function editService($id)
                 log_message('debug',json_encode($data));
                 $this->load->view('services_table', $data); // View will only contain the table
             }
+
+
+            public function categorycreate() {
+                $category = $this->input->post('category');
+            
+                if (empty($category)) {
+                    echo json_encode(['success' => false, 'message' => 'Category is required']);
+                    return;
+                }
+            
+                $data = ['category' => $category];
+                $insert = $this->db->insert('services', $data);
+            
+                if ($insert) {
+                    echo json_encode(['success' => true]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Insert failed']);
+                }
+            }
+
+            public function categories_delete()
+            {
+
+// log_message('debug',print_r($_REQUEST));
+//                 print_r($this->input->post('category'));
+$data=[
+                'category' => $this->input->post('category')
+];
+                $apimodel = new Apimodel();
+                $apimodel->tablename = 'services';
+                $result = $apimodel->deleteData($data);
+                echo $result;
+                // log_message('debug',json_encode($result));
+                // $this->load->view('services_table'); // View will only contain the table
+            }
+            
             
 		}

@@ -1,4 +1,7 @@
-<input type="text" value="10" name="percentage" id="percentage1" class="mb-4 p-2 border border-gray-300 rounded w-32">
+<!-- <input type="text" value="fff" name="category" id="category" class="mb-4 p-2 border border-gray-300 rounded w-32"> -->
+
+
+
 
 <div class="overflow-x-auto">
   <table id="myTable" class="min-w-full text-sm text-left text-gray-700 bg-white border border-gray-200 rounded-lg shadow-sm">
@@ -30,3 +33,17 @@
     </tbody>
   </table>
 </div>
+<script>
+    $('#selectAll').on('click', function() {
+        $('.rowCheckbox').prop('checked', this.checked);
+    });
+
+    // Toggle Select All based on individual checkbox
+    $('.rowCheckbox').on('click', function() {
+        if (!$(this).prop('checked')) {
+            $('#selectAll').prop('checked', false);
+        } else if ($('.rowCheckbox:checked').length === $('.rowCheckbox').length) {
+            $('#selectAll').prop('checked', true);
+        }
+    });
+</script>

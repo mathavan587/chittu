@@ -53,7 +53,7 @@
     <!-- Tab Content: All Services -->
     <div id="all-services" class="tab-content">
         <!-- Import Button -->
-        
+
         <!-- <div class="py-2 w-10 mb-4">
             <a href="<?= base_url('import') ?>"
                class="bg-blue-700 text-center  hover:bg-blue-800 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2">
@@ -138,6 +138,17 @@ foreach($cname as $cname){
 <?php } ?>
 </select>
 
+
+<select id="category" class=" text-xl font-semibold text-gray-800 bg-white shadow hover:shadow-md p-6 rounded-lg border border-gray-200 text-left w-full max-w-md mx-auto mt-10">
+<option selected >Choose Option</option>
+<?php
+foreach($names as $c){
+?>
+<option value="<?=$c->category?>"><?=$c->category?></option>
+<?php } ?>
+</select>
+<input type="text" value="10" name="percentage" id="percentage1" class=" text-xl font-semibold text-gray-800 bg-white shadow hover:shadow-md p-6 rounded-lg border border-gray-200 text-left w-full max-w-md mx-auto mt-10">
+
 <!-- <button onclick="toggleFormCard()" class="bg-white shadow hover:shadow-md p-6 rounded-lg border border-gray-200 text-left w-full max-w-md mx-auto mt-10">
   <h3 class="text-xl font-semibold text-gray-800">+ Import SMM Services</h3>
   <p class="text-gray-600 mt-1">Click to open import form</p>
@@ -186,7 +197,9 @@ foreach($cname as $cname){
 
         </div>
 <!-- Services Table -->
+
 <div id="filteredTable" class="bg-white p-6 rounded-lg shadow-md mx-auto mt-10 h-[250px] overflow-y-auto">
+
 
 
 
@@ -226,16 +239,17 @@ $(document).ready(function(){
         });
 
         if (selected.length === 0) {
-            alert('Please select at least one service.');
+            alert('Please select at least one service.');   
             return;
         }
         var  percentage=$('#percentage1').val();
         var  cname=$('#categorySelect').val();
+        var  category=$('#category').val();
 
         $.ajax({
             url: '<?= base_url("SmmController/submit_selected_services") ?>',
             type: 'POST',
-            data: {service_ids: selected, percentage: percentage, cname:cname },
+            data: {service_ids: selected, percentage: percentage, cname:cname ,category:category },
             success: function(response) {
                 console.log(response);
                 

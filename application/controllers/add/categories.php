@@ -29,6 +29,12 @@
     
 <div class="py-2 w-10">
 
+<button id="add-category-btn"
+    class="mb-4 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg text-sm px-4 py-2">
+    <i class="fas fa-plus"></i> 
+</button>
+
+    
     
 </div>
 
@@ -39,7 +45,7 @@
                 <th>Category</th>
                 <!-- <th>Percentage</th> -->
                 <!-- <th>Status</th> -->
-                <!-- <th>Date</th> -->
+                <!-- <th></th> -->
                 <th>Action</th>
             </tr>
         </thead>
@@ -49,14 +55,10 @@
                 <tr>
                     <td><?=$i?></td>
                     <td><?=$categorie->category?></td>
-                    <!-- <td><?=$categorie->percentage.'%'?></td> -->
+                
                 <td>
                 <div class="flex items-center gap-2">
-        <!-- Edit Button -->
-        <!-- <a href="<?=base_url('edit/categorie/'.$categorie->id)?>"
-    class="edit-btn bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2">
-    <i class="fas fa-edit"></i>
-</a> -->
+    
     
 
 <button type="button"
@@ -66,12 +68,12 @@
     <i class="fas fa-edit"></i>
 </button>
 
-<!-- Delete Button -->
-<!-- <button type="button"
-    class="delete-btn bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2"
-    data-id="<?=$categorie->id?>">
+<button type="button"
+    class="delete-btn1 bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2"
+    data-id="<?=$categorie->category?>">
     <i class="fas fa-trash"></i>
-</button> -->
+</button>
+
 </div>
 </td>
 
@@ -313,6 +315,80 @@ $('.edit-btn').on('click', function () {
 
 
 
+$('.delete-btn1').on('click', function() {
+    var category = $(this).data('id');
+    alert(category);
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This action cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '<?= base_url("admin/categorycreate") ?>',
+                type: 'POST',
+                data: { category: category },
+                success: function(response) {
+                    console.log("THE categories_delete "+response);
+                    
+                    // var res = JSON.parse(response);
+                    // if (res.success) {
+                    //     Swal.fire('Deleted!', 'The category has been deleted.', 'success')
+                    //         .then(() => {
+                    //             location.reload();
+                    //         });
+                    // } else {
+                    //     Swal.fire('Error!', res.message || 'Failed to delete the category.', 'error');
+                    // }
+                }
+            });
+        }
+    });
+});
+
+
+
+$('#add-category-btn').on('click', function () {
+    Swal.fire({
+        title: 'Add New Category',
+        html: `<input id="swal-new-category" class="swal2-input" placeholder="Category Name">`,
+        showCancelButton: true,
+        confirmButtonText: 'Add',
+        preConfirm: () => {
+            const category = document.getElementById('swal-new-category').value;
+            if (!category) {
+                Swal.showValidationMessage('Category name is required');
+                return false;
+            }
+            return { category: category };
+        }
+    }).then((result) => {
+        if (result.isConfirmed && result.value) {
+            $.ajax({
+                url: '<?= base_url("admin/categorycreate") ?>', // Adjust URL to match your controller
+                type: 'POST',
+                data: result.value,
+                success: function (response) {
+                    const res = JSON.parse(response);
+                    if (res.success) {
+                        Swal.fire('Added!', 'Category added successfully.', 'success')
+                            .then(() => location.reload());
+                    } else {
+                        Swal.fire('Error!', res.message || 'Add failed.', 'error');
+                    }
+                },
+                error: function () {
+                    Swal.fire('Error!', 'Something went wrong while adding.', 'error');
+                }
+            });
+        }
+    });
+});
 
 
 

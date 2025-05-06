@@ -158,7 +158,8 @@ class SmmController extends CI_Controller
             $ids=$this->input->post('service_ids');
             $per=$this->input->post('percentage');
             $cname=$this->input->post('cname');
-            echo $cname;
+            $category=$this->input->post('category');
+            // echo $cname;
             foreach ($ids as $id) {
 
             // echo $id; //use getsigledata to get the data from the table
@@ -182,7 +183,7 @@ class SmmController extends CI_Controller
             $data = [
                                 'service_id' => $service->service_id,
                                 'name'       => $service->name,
-                                'category'   => $service->category,
+                                'category'   => $category,
                                 'percentage'       => $per,
                                 'cname'       => $cname,
                                 'rate'       => $service->rate,
