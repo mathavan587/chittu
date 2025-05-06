@@ -122,9 +122,11 @@ public function index()
                                 'email' => $this->input->post('email'),
                                 'mobile' => $this->input->post('mobile'),
                                 'otp' => $this->input->post('otp'),
+                                'usertype' => "user",
                                 'status' => $this->input->post('status')
                             ];
                         //    print_r($data);
+                        // log_message
                             // $apimodel = new Apimodel();
                             $apimodel = new Apimodel();
                             $apimodel->tablename = 'users';
