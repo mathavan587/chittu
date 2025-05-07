@@ -133,7 +133,7 @@ public function index()
                             $apimodel = new Apimodel();
                             $apimodel->tablename = 'users';
                             $result=$apimodel->insertData($data);
-//  log_message('debug',json_encode($result));
+// // log_message('debug',json_encode($result));
                         
                             if ($result) {
                                 echo json_encode(['success' => true]);
@@ -174,7 +174,7 @@ public function index()
                                         $services = $apimodel->getMultipleData($condition,$select);
  
                                         $apimodel->tablename = 'services_import';
-                                        $select=array('id', 'service_id', 'name', 'category', 'rate', 'set_rate','percentage', 'min', 'max', 'type', 'desc' ,'imported');
+                                        $select=array('id', 'service_id', 'name', 'cname', 'category', 'rate', 'set_rate','percentage', 'min', 'max', 'type', 'desc' ,'imported');
                                         $services_count = count($apimodel->getMultipleData($condition,$select));
                                         $services_import = $apimodel->getMultipleData($condition,$select);
                               
@@ -188,7 +188,7 @@ public function index()
                                             'row'=>'category'
                                         ];
                                         $names = $apimodel->getGroupedCategories($data);
-//  log_message('debug',json_encode($names));
+// // log_message('debug',json_encode($names));
                                         $data=[
                                         'dashboard' => 'Services',
                                         'path' => 'General/Services',
@@ -292,6 +292,7 @@ public function index()
             $max = $this->input->post('max');
             $type = $this->input->post('type');
             $desc = $this->input->post('desc');
+            $avg_time = $this->input->post('avg_time');
             $category = $this->input->post('category');
             $status = $this->input->post('status');
             $id = $this->input->post('id'); // the service ID being updated
@@ -306,6 +307,7 @@ public function index()
                 'category' => $category,
                 'percentage' => $percentage,
                 'max' => $max,
+                'avg_time' => $avg_time,
                 'type' => $type,
                 'desc' => $desc,
                 'status' => $status
@@ -315,7 +317,7 @@ public function index()
             );
 
             
-            // Update service in the database using the model
+            // Update service in the database using the model   
             // $result = $this->ServiceModel->update_service($id, $data);
             $apimodel = new Apimodel();
            $apimodel->tablename = 'services';
@@ -340,7 +342,7 @@ public function editService($id)
 {
     $apimodel = new Apimodel();
     $apimodel->tablename = 'services';
-    $service = $apimodel->getSingleData(array('id' => $id,'status'=>'0','is_deleted'=>'0'),array(`id`, `service_id`, `name`, `category`, `rate`, `set_rate`,`category`,`min`, `max`, `type`, `desc`));
+    $service = $apimodel->getSingleData(array('id' => $id,'status'=>'0','is_deleted'=>'0'),array('id','avg_time','percentage', 'service_id', 'name', 'category', 'rate', 'set_rate','category','min', 'max', 'type', 'desc'));
     // $apimodel->tablename = 'categories';
     // $select='*';
     // $condition='';
@@ -446,7 +448,7 @@ public function editService($id)
                         'row'=>'category'
                     ];
                     $categories = $apimodel->getGroupedCategories($data);
-                    // log_message('debug',json_encode($categories));
+                    //// log_message('debug',json_encode($categories));
                     $data=[
                     'dashboard' => 'Categories',
                     'path' => 'General/Categories',
@@ -473,7 +475,7 @@ public function editService($id)
                                     'row'=>'cname'
                                 ];
                                 $providers = $apimodel->getGroupedCategories($data);
-                                // log_message('debug',json_encode($providers));
+                                //// log_message('debug',json_encode($providers));
                                 $data=[
                                 'dashboard' => 'Providers',
                                 'path' => 'General/Providers',
@@ -495,6 +497,8 @@ public function editService($id)
 
                             public function orders()
                             {
+
+                                
                                             $this->check_session();
                             
                                             $apimodel = new Apimodel();
@@ -504,7 +508,7 @@ public function editService($id)
                                             $select=array('id','category_id','service_id','link','quantity','amount','user_id','created_at','orderId','status');
                                             $orders = $apimodel->getMultipleData($condition,$select);
                                             $columns = array('Order id','User','Orde deatils','Status','Action');
-                                            // log_message('debug',json_encode($providers));
+                                         
                                             $data=[
                                             'dashboard' => 'orders',
                                             'path' => 'General/orders',
@@ -634,7 +638,7 @@ public function editService($id)
                 $apimodel = new Apimodel();
                $apimodel->tablename = 'services';
                 $result = $apimodel->updateData($condition, $data);
-                // log_message('debug',json_encode($result));
+                //// log_message('debug',json_encode($result));
                
             }
 
@@ -662,7 +666,7 @@ public function editService($id)
                 $apimodel = new Apimodel();
                $apimodel->tablename = 'services';
                 $result = $apimodel->updateData($condition, $data);
-                // log_message('debug',json_encode($result));
+                //// log_message('debug',json_encode($result));
                
             }
 
@@ -675,33 +679,60 @@ public function editService($id)
                 ];
                 $data['services_import'] = $apimodel->getMultipleData($data); // Adjust to your DB logic
                 // print_r($data);
-                log_message('debug',json_encode($data));
+               // log_message('debug',json_encode($data));
                 $this->load->view('services_table', $data); // View will only contain the table
             }
 
 
-            public function categorycreate() {
+            public function create() {
+// log_message('debug','categorycreate');
+                $data = array(
+                    'category' => $this->input->post('category'),
+                );
+                $apimodel = new Apimodel();
+               $apimodel->tablename = 'services';
+                $insert = $apimodel->insertData($data);
+                // echo $result;
+                // Load model properly if not autoloaded
+                // $this->load->model('Apimodel');
+                
+                // // Get category from POST
                 $category = $this->input->post('category');
+                // log_message('debug',json_encode($category));
             
+                // // Validate input
                 if (empty($category)) {
-                    echo json_encode(['success' => false, 'message' => 'Category is required']);
-                    return;
+                    return $this->output
+                        ->set_content_type('application/json')
+                        ->set_output(json_encode([
+                            'success' => false,
+                            'message' => 'Category is required'
+                        ]));
                 }
             
+                // // Prepare data
                 $data = ['category' => $category];
-                $insert = $this->db->insert('services', $data);
             
+                // // Set table name in model and insert
+                // $this->Apimodel->tablename = 'services';
+                // $insert = $this->Apimodel->insertData($data);
+            
+                // // Return JSON response
                 if ($insert) {
-                    echo json_encode(['success' => true]);
+                    $response = ['success' => true];
                 } else {
-                    echo json_encode(['success' => false, 'message' => 'Insert failed']);
+                    $response = ['success' => false, 'message' => 'Insert failed'];
                 }
+            
+                $this->output
+                    ->set_content_type('application/json')
+                    ->set_output(json_encode($response));
             }
+            
 
             public function categories_delete()
             {
 
-// log_message('debug',print_r($_REQUEST));
 //                 print_r($this->input->post('category'));
 $data=[
                 'category' => $this->input->post('category')
@@ -709,8 +740,21 @@ $data=[
                 $apimodel = new Apimodel();
                 $apimodel->tablename = 'services';
                 $result = $apimodel->deleteData($data);
-                echo $result;
-                // log_message('debug',json_encode($result));
+                if ($result) {
+                
+                echo '1';
+                        // $response = ['success' => true];
+                } else {
+                    echo '0';
+                    // $response = ['success' => false, 'message' => 'Insert failed'];
+                }
+
+                // echo json_encode($response);
+            
+                // $this->output
+                //     ->set_content_type('application/json')
+                //     ->set_output(json_encode($response));
+                //// log_message('debug',json_encode($result));
                 // $this->load->view('services_table'); // View will only contain the table
             }
             

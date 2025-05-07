@@ -1,3 +1,5 @@
+
+
 <form id="updateServiceForm" class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg space-y-6">
     <input type="hidden" name="id" value="<?= $service->id ?>" />
 
@@ -79,6 +81,16 @@
     <div>
         <label for="desc" class="block text-lg font-medium text-gray-700">Description</label>
         <textarea name="desc" rows="4" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"><?= $service->desc ?></textarea>
+    </div>
+
+    
+    <!-- Description -->
+    <div>
+        <label for="desc" class="block text-lg font-medium text-gray-700">	
+        Average Time</label>
+        <input type="text" name="avg_time" value="<?= $service->avg_time ?>" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+
+        <!-- <textarea name="avg_time" rows="4" required class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"><?= $service->avg_time ?></textarea> -->
     </div>
 
     <!-- Status -->

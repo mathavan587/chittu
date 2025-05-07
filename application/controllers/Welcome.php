@@ -27,8 +27,34 @@
 			*/
 			public function index()
 			{
+
+			    $apimodel = new Apimodel();
+                                    
+                                        $apimodel->tablename = 'services';
+                                        $select=array('id', 'service_id', 'name', 'category', 'rate', 'set_rate','percentage', 'min', 'max', 'type','avg_time', 'desc');
+                                        $condition=array('is_deleted'=>'0');
+                                        $services_count = count($apimodel->getMultipleData($condition,$select));
+                                        $services = $apimodel->getMultipleData($condition,$select);
+ 
+				$data=[
+					// 'dashboard' => 'Services',
+					// 'path' => 'General/Services',
+					// 'content'=>'',
+					//  'container'=>'1',
+					// 'container'=>'0',
+					// 'include'=> 'Services',
+					// 'services_count'=>$services_count,
+					'services'=>$services,
+					// 'names'=>$names,
+					// 'cname'=>$cname,
+					// 'services_import'=>$services_import
+				 ];
+
+
+
+				 
 				$this->load->view('home/include/header');
-				$this->load->view('home/body');
+				$this->load->view('home/body',$data);
 				$this->load->view('home/include/footer');
 			}
 			

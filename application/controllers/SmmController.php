@@ -109,7 +109,7 @@ class SmmController extends CI_Controller
                 ];
                 // var_dump($data);                                                                                
                  
-                // log_message('debug',json_encode($data));
+                //// log_message('debug',json_encode($data));
 
 
                 $apimodel = new Apimodel();
@@ -144,7 +144,7 @@ class SmmController extends CI_Controller
             
 
 
-                                //    log_message('debug',json_encode($result));
+                                //   // log_message('debug',json_encode($result));
 
         // $result=$apimodel->insertData($data);
  echo $result;
@@ -154,7 +154,7 @@ class SmmController extends CI_Controller
  
 
         public function submit_selected_services(){
-            // log_message('debug',json_encode('submit_selected_services'));
+            //// log_message('debug',json_encode('submit_selected_services'));
             $ids=$this->input->post('service_ids');
             $per=$this->input->post('percentage');
             $cname=$this->input->post('cname');
@@ -171,9 +171,10 @@ class SmmController extends CI_Controller
                 'imported' => '0'
             ];
             $service=$apimodel->getSingleData($condition);
-            // log_message('debug',json_encode($service));
+           // log_message('debug',json_encode($service));
+        //    log_message('debug',json_encode($service));
             if ($service) {
-            $service=$apimodel->getSingleData($getid);
+            $service=$apimodel->getSingleData($condition);
             $set=($service->rate*$per)/100;
             $set_rate=$service->rate+$set;
 

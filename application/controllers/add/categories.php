@@ -69,7 +69,7 @@
 </button>
 
 <button type="button"
-    class="delete-btn1 bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2"
+    class="delete-btn bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 text-white font-medium rounded-lg text-sm px-4 py-1 flex items-center gap-2"
     data-id="<?=$categorie->category?>">
     <i class="fas fa-trash"></i>
 </button>
@@ -211,8 +211,8 @@ $(document).ready(function() {
 
 // Delete button click event
 $('.delete-btn').on('click', function() {
-    var serviceId = $(this).data('id');  // Get service ID
-alert(serviceId);
+    var category = $(this).data('id');  // Get service ID
+// alert(category);
     Swal.fire({
         title: 'Are you sure?',
         text: "This action cannot be undone!",
@@ -225,13 +225,14 @@ alert(serviceId);
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '<?= base_url("categorie/delete") ?>', // Your delete URL
+                url: '<?= base_url("admin/categories_delete") ?>', // Your delete URL
                 type: 'POST',
-                data: { id: serviceId },
+                data: { category: category },
                 success: function(response) {
-                    var res = JSON.parse(response);
+                    // var res = JSON.parse(response);
+                    // console.log(response);
                     
-                    if (res.success) {
+                    if (response) {
                         Swal.fire(
                             'Deleted!',
                             'The service has been deleted.',
@@ -246,13 +247,6 @@ alert(serviceId);
                             'error'
                         );
                     }
-                },
-                error: function() {
-                    Swal.fire(
-                        'Error!',
-                        'Something went wrong while deleting.',
-                        'error'
-                    );
                 }
             });
         }
@@ -284,12 +278,14 @@ $('.edit-btn').on('click', function () {
     }).then((result) => {
         if (result.isConfirmed && result.value) {
             // Perform AJAX update
+
+            // alert(result.value);
+
             $.ajax({
                 url: '<?= base_url("admin/categoryupdate") ?>',
                 type: 'POST',
                 data: result.value,
                 success: function (response) {
-                    console.log(response);
                     
                     const res = JSON.parse(response);
                     if (res.success) {
@@ -315,80 +311,90 @@ $('.edit-btn').on('click', function () {
 
 
 
-$('.delete-btn1').on('click', function() {
-    var category = $(this).data('id');
-    alert(category);
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "This action cannot be undone!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'Cancel'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $.ajax({
-                url: '<?= base_url("admin/categorycreate") ?>',
-                type: 'POST',
-                data: { category: category },
-                success: function(response) {
-                    console.log("THE categories_delete "+response);
+// $('.delete-btn1').on('click', function() {
+//     var category = $(this).data('id');
+//     alert(category);
+//     Swal.fire({
+//         title: 'Are you sure?',
+//         text: "This action cannot be undone!",
+//         icon: 'warning',
+//         showCancelButton: true,
+//         confirmButtonColor: '#d33',
+//         cancelButtonColor: '#3085d6',
+//         confirmButtonText: 'Yes, delete it!',
+//         cancelButtonText: 'Cancel'
+//     }).then((result) => {
+//         if (result.isConfirmed) {
+//             $.ajax({
+//                 url: '<?= base_url("admin/categorycreate") ?>',
+//                 type: 'POST',
+//                 data: { category: category },
+//                 success: function(response) {
+//                     console.log("THE categories_delete "+response);
                     
-                    // var res = JSON.parse(response);
-                    // if (res.success) {
-                    //     Swal.fire('Deleted!', 'The category has been deleted.', 'success')
-                    //         .then(() => {
-                    //             location.reload();
-                    //         });
-                    // } else {
-                    //     Swal.fire('Error!', res.message || 'Failed to delete the category.', 'error');
-                    // }
-                }
-            });
-        }
-    });
-});
+//                     // var res = JSON.parse(response);
+//                     // if (res.success) {
+//                     //     Swal.fire('Deleted!', 'The category has been deleted.', 'success')
+//                     //         .then(() => {
+//                     //             location.reload();
+//                     //         });
+//                     // } else {
+//                     //     Swal.fire('Error!', res.message || 'Failed to delete the category.', 'error');
+//                     // }
+//                 }
+//             });
+//         }
+//     });
+// });
 
 
 
 $('#add-category-btn').on('click', function () {
     Swal.fire({
-        title: 'Add New Category',
-        html: `<input id="swal-new-category" class="swal2-input" placeholder="Category Name">`,
-        showCancelButton: true,
-        confirmButtonText: 'Add',
-        preConfirm: () => {
-            const category = document.getElementById('swal-new-category').value;
-            if (!category) {
-                Swal.showValidationMessage('Category name is required');
-                return false;
-            }
-            return { category: category };
+    title: 'Add New Category',
+    html: `<input id="swal-new-category" class="swal2-input" placeholder="Category Name">`,
+    showCancelButton: true,
+    confirmButtonText: 'Add',
+    preConfirm: () => {
+        const category = document.getElementById('swal-new-category').value.trim();
+        if (!category) {
+            Swal.showValidationMessage('Category name is required');
+            return false;
         }
-    }).then((result) => {
-        if (result.isConfirmed && result.value) {
-            $.ajax({
-                url: '<?= base_url("admin/categorycreate") ?>', // Adjust URL to match your controller
-                type: 'POST',
-                data: result.value,
-                success: function (response) {
-                    const res = JSON.parse(response);
-                    if (res.success) {
-                        Swal.fire('Added!', 'Category added successfully.', 'success')
-                            .then(() => location.reload());
-                    } else {
-                        Swal.fire('Error!', res.message || 'Add failed.', 'error');
-                    }
-                },
-                error: function () {
-                    Swal.fire('Error!', 'Something went wrong while adding.', 'error');
+        return { category: category };
+    }
+}).then((result) => {
+    if (result.isConfirmed && result.value) {
+        $.ajax({
+            url: '<?= base_url("create") ?>', // Replace with actual route if not using PHP
+            type: 'POST',
+            data: result.value,
+            success: function (response) {
+                let res;
+                try {
+                    res = typeof response === 'string' ? JSON.parse(response) : response;
+                } catch (e) {
+                    Swal.fire('Error!', 'Invalid server response.', 'error');
+                    return;
                 }
-            });
-        }
-    });
+
+                if (res.success) {
+                    Swal.fire('Added!', 'Category added successfully.', 'success')
+                        .then(() => location.reload());
+                } else {
+                    Swal.fire('Error!', res.message || 'Add failed.', 'error');
+                }
+            },
+            error: function () {
+                Swal.fire('Error!', 'Something went wrong while adding.', 'error');
+            }
+        });
+    }
 });
+
+
+});
+
 
 
 

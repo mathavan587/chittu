@@ -11,6 +11,7 @@
         <th class="px-4 py-3 border-b">S/no</th>
         <!-- <th class="px-4 py-3 border-b">Service ID</th> -->
         <th class="px-4 py-3 border-b">Name</th>
+        <th class="px-4 py-3 border-b">Connect name</th>
         <th class="px-4 py-3 border-b">Category</th>
         <!-- <th class="px-4 py-3 border-b">Percentage</th> -->
         <th class="px-4 py-3 border-b">Rate</th>
@@ -24,6 +25,7 @@
         <td class="px-4 py-3 border-b"><?= $i ?></td>
         <!-- <td class="px-4 py-3 border-b"><?= $service->service_id ?></td> -->
         <td class="px-4 py-3 border-b"><?= $service->name ?></td>
+        <td class="px-4 py-3 border-b"><?= $service->cname ?></td>
         <td class="px-4 py-3 border-b"><?= $service->category ?></td>
         <!-- <td class="px-4 py-3 border-b"><?= $service->percentage . '%' ?></td> -->
         <td class="px-4 py-3 border-b"><?= '₹' . $service->rate ?></td>

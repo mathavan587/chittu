@@ -51,7 +51,7 @@
         </button>
       </div>
       
-      <form class="space-y-4">
+      <!-- <form class="space-y-4">
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
           <input type="email" id="email" placeholder="your@email.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
@@ -72,7 +72,7 @@
         
         <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition">Login</button>
       </form>
-      
+       -->
       <div class="mt-6 text-center">
         <p class="text-sm text-gray-600">Don't have an account? <a href="#" class="text-indigo-600 font-medium">Sign up now</a></p>
       </div>
@@ -149,21 +149,21 @@
             </a>
           </div>
           <div class="mt-8 flex items-center text-sm text-indigo-100">
-            <div class="flex -space-x-2 mr-4">
+            <div class="flex -space-x-2 mr-4">  
+              <!-- <img src="/api/placeholder/32/32" alt="User" class="rounded-full border-2 border-white w-8 h-8" />
               <img src="/api/placeholder/32/32" alt="User" class="rounded-full border-2 border-white w-8 h-8" />
-              <img src="/api/placeholder/32/32" alt="User" class="rounded-full border-2 border-white w-8 h-8" />
-              <img src="/api/placeholder/32/32" alt="User" class="rounded-full border-2 border-white w-8 h-8" />
+              <img src="/api/placeholder/32/32" alt="User" class="rounded-full border-2 border-white w-8 h-8" /> -->
             </div>
-            <span>Trusted by 10,000+ marketers worldwide</span>
+            <!-- <span>Trusted by 10,000+ marketers worldwide</span> -->
           </div>
         </div>
         <div class="mt-10 md:mt-0 md:ml-10 max-w-md">
-          <div class="bg-white rounded-xl shadow-xl p-6">
+          <!-- <div class="bg-white rounded-xl shadow-xl p-6">
             <div class="flex justify-center mb-6">
               <img src="/api/placeholder/80/80" alt="Dashboard Icon" class="w-20 h-20">
-            </div>
-            <h3 class="text-gray-800 text-xl font-semibold mb-4 text-center">Create Your Account</h3>
-        <form id="userform" class="space-y-6">
+            </div> -->
+            <!-- <h3 class="text-gray-800 text-xl font-semibold mb-4 text-center">Create Your Account</h3> -->
+        <!-- <form id="userform" class="space-y-6">
     <div>
       <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
       <input type="text" name="name" id="name" placeholder="Your full name"
@@ -192,12 +192,12 @@
       class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700 transition font-medium">
       Submit
     </button>
-  </form>
+  </form> -->
 
 
-            <p class="text-gray-500 text-xs text-center mt-4">By signing up, you agree to our Terms of Service and Privacy Policy</p>
-          </div>
-        </div>
+            <!-- <p class="text-gray-500 text-xs text-center mt-4">By signing up, you agree to our Terms of Service and Privacy Policy</p> -->
+          <!-- </div> -->
+        <!-- </div> -->
       </div>
     </div>
   </section>
