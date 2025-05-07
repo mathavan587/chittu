@@ -123,7 +123,9 @@ public function index()
                                 'mobile' => $this->input->post('mobile'),
                                 'otp' => $this->input->post('otp'),
                                 'usertype' => "user",
-                                'status' => $this->input->post('status')
+                                'status' => $this->input->post('status'),
+                                'password' => md5($this->input->post('password')),
+                                'is_deleted' => 0
                             ];
                         //    print_r($data);
                         // log_message
@@ -131,6 +133,7 @@ public function index()
                             $apimodel = new Apimodel();
                             $apimodel->tablename = 'users';
                             $result=$apimodel->insertData($data);
+//  log_message('debug',json_encode($result));
                         
                             if ($result) {
                                 echo json_encode(['success' => true]);
@@ -140,6 +143,23 @@ public function index()
                         }
                         
 
+                        public function delete_user() {
+                            $id = $this->input->post('id');
+                            
+                            if ($id) {
+                                $this->db->where('id', $id);
+                                $deleted = $this->db->delete('users'); // replace 'users' with your actual table name
+                                
+                                if ($deleted) {
+                                    echo json_encode(['success' => true]);
+                                } else {
+                                    echo json_encode(['success' => false]);
+                                }
+                            } else {
+                                echo json_encode(['success' => false]);
+                            }
+                        }
+                        
 
                         public function services()
                         {
