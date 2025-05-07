@@ -73,7 +73,7 @@ $(document).ready(function() {
                 $.each(data, function(index, service) {
                     $serviceSelect.append(
                         $('<option>', {
-                            value: service.id,
+                            value: service.name,
                             text: service.name
                         })
                     );
@@ -100,36 +100,36 @@ $(document).ready(function() {
 
 
 
-    $('select[name="category"]').on('change', function() {
-        var catId = $(this).val();
+    // $('select[name="category"]').on('change', function() {
+    //     var catId = $(this).val();
 
-        $.ajax({
-            url: '<?= base_url('user/getCategorypercentage') ?>',
-            type: 'GET',
-            data: { category_id: catId },
-            dataType: 'json',
-            success: function(data) {
-              // console.log(data);  
+    //     $.ajax({
+    //         url: '<?= base_url('user/getCategorypercentage') ?>',
+    //         type: 'GET',
+    //         data: { category_id: catId },
+    //         dataType: 'json',
+    //         success: function(data) {
+    //           // console.log(data);  
 
-            $('#percentage').val(data.percentage);
+    //         $('#percentage').val(data.percentage);
 
-                // var $serviceSelect = $('select[name="service"]');
-                // $serviceSelect.empty().append('<option>Choose a service</option>');
+    //             // var $serviceSelect = $('select[name="service"]');
+    //             // $serviceSelect.empty().append('<option>Choose a service</option>');
 
-                // $.each(data, function(index, service) {
-                //     $serviceSelect.append(
-                //         $('<option>', {
-                //             value: service.id,
-                //             text: service.name
-                //         })
-                //     );
-                // });
-            },
-            error: function(xhr, status, error) {
-                console.error("AJAX Error:", error);
-            }
-        });
-    });
+    //             // $.each(data, function(index, service) {
+    //             //     $serviceSelect.append(
+    //             //         $('<option>', {
+    //             //             value: service.id,
+    //             //             text: service.name
+    //             //         })
+    //             //     );
+    //             // });
+    //         },
+    //         error: function(xhr, status, error) {
+    //             console.error("AJAX Error:", error);
+    //         }
+    //     });
+    // });
 
     
 
@@ -145,15 +145,19 @@ $(document).ready(function() {
 
 
     $('select[name="service"]').on('change', function () {
-    var serviceId = $(this).val();                      // Correct: it's the selected service ID
-    var percentage = parseFloat($('#percentage').val()) || 0; // Safe fallback if empty
-
+    var service = $(this).val();                      // Correct: it's the selected service ID
+    // var percentage = parseFloat($('#percentage').val()) || 0; // Safe fallback if empty
+alert(service);
+    // console.log(category); 
     $.ajax({
         url: '<?= base_url('user/getServicesByservice') ?>',
         type: 'GET',
-        data: { category_id: serviceId },               // Correct key: service_id
+        data: { service: service },               // Correct key: service_id
         dataType: 'json',
         success: function (data) {
+          // console.log(data);
+          
+          $('#percentage').val(data.percentage);
             if (!data || !data.rate) {
                 console.error("Invalid response data", data);
                 return;
@@ -161,7 +165,7 @@ $(document).ready(function() {
 
             // Price calculation logic
             var baseRate = parseFloat(data.rate);
-            var markup = (baseRate * percentage) / 100;
+            var markup = (baseRate * data.percentage) / 100;
             var finalRate = baseRate + markup;
             
             if (Number.isInteger(finalRate)) {

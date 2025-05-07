@@ -128,7 +128,7 @@ public function index()
                                 'is_deleted' => 0
                             ];
                         //    print_r($data);
-                        // log_message
+                        // log_message 
                             // $apimodel = new Apimodel();
                             $apimodel = new Apimodel();
                             $apimodel->tablename = 'users';
@@ -487,7 +487,41 @@ public function editService($id)
                                 $this->load->view('admin/include/header',$data);
                                 $this->load->view('admin/body');
                                 $this->load->view('admin/include/footer');
-                            }    
+                            } 
+                            
+                            
+
+
+
+                            public function orders()
+                            {
+                                            $this->check_session();
+                            
+                                            $apimodel = new Apimodel();
+                                            
+                                            $apimodel->tablename = 'orders';
+                                            $condition=array('is_deleted'=>'0');
+                                            $select=array('id','category_id','service_id','link','quantity','amount','user_id','created_at','orderId','status');
+                                            $orders = $apimodel->getMultipleData($condition,$select);
+                                            $columns = array('Order id','User','Orde deatils','Status','Action');
+                                            // log_message('debug',json_encode($providers));
+                                            $data=[
+                                            'dashboard' => 'orders',
+                                            'path' => 'General/orders',
+                                            'content'=>'',
+                                             'container'=>'1',
+                                            'container'=>'0',
+                                            'include'=> 'orders',
+                                            'orders'=>$orders,
+                                            'columns'=>$columns,
+                                         ];
+                                        
+                                            $this->load->view('admin/include/header',$data);
+                                            $this->load->view('admin/body');
+                                            $this->load->view('admin/include/footer');
+                                        } 
+
+
             
                 public function delete_categorie() 
                  {

@@ -23,7 +23,7 @@
                     <?php
                     foreach($categories as $s){
                     ?>
-                    <option value="<?=$s->id?>" ><?=$s->categories?></option>
+                    <option value="<?=$s->category?>" ><?=$s->category?></option>
                     <?php } ?>
                     </select>
                     </div>

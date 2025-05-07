@@ -29,8 +29,13 @@
 			'carde_title'=>'Create Account'
 		);
 		$apimodel = new Apimodel();
-		$apimodel->tablename = 'categories';
-		$data['categories'] = $apimodel->getMultipleData();
+		// $apimodel->tablename = 'categories';
+		// $data['categories'] = $apimodel->getMultipleData();
+        $apimodel->tablename = 'services';
+        $data=[
+            'row'=>'category'
+        ];
+        $data['categories'] = $apimodel->getGroupedCategories($data);
 		$this->load->view('user/header',$data);
 		$this->load->view('user/home');
 		$this->load->view('user/footer');
@@ -62,14 +67,14 @@ public function getServicesByCategory()
 public function getServicesByservice(){
 	$this->check_session();
 
-    $catId = $this->input->get('category_id'); // from GET
+    $service = $this->input->get('service'); // from GET
 //   echo $catId;
 	// echo $catId;	
     $this->load->model('Apimodel');
     $this->Apimodel->tablename = 'services';
 
     // $services = $this->Apimodel->getMultipleData(['category' => $catId], '*');
-    $services = $this->Apimodel->getSingleData(['id' => $catId], '*');
+    $services = $this->Apimodel->getSingleData(['name' => $service], '*');
     
     echo json_encode($services); // for AJAX
 

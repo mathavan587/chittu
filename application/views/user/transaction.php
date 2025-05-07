@@ -40,6 +40,8 @@
                 <tbody class="divide-y divide-gray-200">
                     <!-- Sample Row 1: Completed -->
                      <?php
+                    //  print_r($transaction);
+                     
                      foreach($transaction as $data){
                         $apimodel = new Apimodel();
                         $apimodel->tablename = 'services';
@@ -60,7 +62,7 @@
                            <?=$users->email?>
                         </td>
                          <td class="px-4 py-3">
-                           <?=$services->name?>
+                           <?=$data->service_id?>
                         </td>
                          <td class="px-4 py-3 text-right font-medium">
                             <?=$data->amount ?>
