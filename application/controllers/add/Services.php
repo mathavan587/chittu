@@ -60,35 +60,58 @@
                 <i class="fas fa-upload"></i>
             </a>
         </div> -->
+    
+
+        <button id="addServiceBtn" class="mb-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">
+  <i class="fas fa-plus mr-1"></i> Add Service
+</button>
+
 
         <!-- Services Table -->
         <table id="myTable" class="w-full text-sm text-left text-gray-700 bg-white shadow-md sm:rounded-lg">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                    <th>S/no</th>
-                    <th>Service ID</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Percentage</th>
-                    <th>Rate</th>
-                    <th>Display Rate</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+        <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+          <tr>
+            <!-- <th class="px-4 py-3 border-b"><input type="checkbox" id="selectAll" class="accent-blue-500"></th> -->
+            <th class="px-4 py-3 border-b">S/no</th>
+            <!-- <th class="px-4 py-3 border-b">Service ID</th> -->
+            <!-- <th class="px-4 py-3 border-b whitespace-normal w-60  break-words">id</th> -->
+            <th class="px-4 py-3 border-b whitespace-normal w-60  break-words">Name</th>
+            <th class="px-4 py-3 border-b whitespace-normal w-60  break-words"> Provider</th>
+            <!-- <th class="px-4 py-3 border-b">Connect name</th> -->
+            <th class="px-4 py-3 border-b">Min/Max</th>
+            <th class="px-4 py-3 border-b w-60">Rate per 1k	</th>
+            <!-- <th class="px-4 py-3 border-b">Percentage</th> -->
+            <!-- <th class="px-4 py-3 border-b"></th> -->
+            <!-- <th class="px-4 py-3 border-b">Rate per 1k</th> -->
+            <th class="px-4 py-3 border-b">	
+            Average Time</th>
+            <th class="px-4 py-3 border-b">Action</th>
+            <!-- <th class="px-4 py-3 border-b">Display Rate</th> -->
+          </tr>
+        </thead>
             <tbody>
                 <?php $i = 0; foreach($services as $service) { $i++; 
                     $apimodel = new Apimodel();
                     $apimodel->tablename = 'categories';
-                    $getdata = $apimodel->getSingleData(['id' => $service->category], ['categories', 'percentage']);
+                    $getdata = $apimodel->getSingleData(['id' => $service->category], ['categories']);
                 ?>
                 <tr>
                     <td><?= $i ?></td>
-                    <td><?= $service->service_id ?></td>
+                    <!-- <+td><?= $service->service_id ?></+td> -->
                     <td><?= $service->name ?></td>
-                    <td><?= $service->category ?></td>
-                    <td><?= $service->percentage . '%' ?></td>
-                    <td><?= '₹' . $service->rate ?></td>
-                    <td><?= '₹' . $service->set_rate ?></td>
+                    <td  ><?= $service->category.'<br>'.$service->service_id ?></td>
+                    <td><?= number_format($service->min).'/'.number_format($service->max)  ?></td>    
+                    <!-- <td><?= $service->percentage . '%' ?></td>  -->
+                    <!--<td><?= $service->percentage . '%' ?></td> -->
+                    <td>
+    ₹<?=   $service->rate ?>
+    <br>
+    <span style="font-weight: 100; color: #999;">
+    ₹<?=  $service->set_rate ?>
+</span>
+</td>
+                    <!-- <td></td> -->
+                    <td><?= $service->avg_time ?></td>
                     <td>
                         <div class="flex items-center gap-2">
                             <button type="button"
@@ -114,6 +137,7 @@
                 <?php } ?>
             </tbody>
         </table>
+
     </div>
 
     <!-- Tab Content: Inactive Services -->
@@ -213,6 +237,84 @@ foreach($names as $c){
     Delete
 </button>
 
+
+<div id="viewModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden justify-center items-center z-50">
+    <div class="bg-white rounded-lg p-6 w-full max-w-md">
+        <h2 class="text-xl font-bold mb-4">Service Details</h2>
+        <div id="modalContent" class="text-gray-700 space-y-2">
+            <!-- Fetched content will go here -->
+        </div>
+        <button id="closeModal" class="mt-4 bg-gray-500 hover:bg-gray-700 text-white py-1 px-4 rounded">
+            Close
+        </button>
+    </div>
+</div>
+
+<script>
+  $('#addServiceBtn').on('click', function () {
+    Swal.fire({
+      title: 'Add New Service',
+      html: `
+        <div style="max-height:400px; overflow-y:auto; text-align:left">
+          <input type="text" id="service_id" class="swal2-input" placeholder="Service ID">
+          <input type="text" id="name" class="swal2-input" placeholder="Service Name">
+          <input type="number" id="min" class="swal2-input" placeholder="Min Order">
+          <input type="number" id="max" class="swal2-input" placeholder="Max Order">
+          <input type="text" id="percentage" class="swal2-input" placeholder="Percentage">
+          <input type="text" id="type" class="swal2-input" placeholder="Type">
+          <input type="text" id="avg_time" class="swal2-input" placeholder="Average Time">
+          <input type="text" id="category1" class="swal2-input" placeholder="Category">
+          <input type="text" id="provider" class="swal2-input" placeholder="Providers">
+          <input type="text" id="rate" class="swal2-input" placeholder="Original Rate per 1000">
+          <textarea id="desc" class="swal2-textarea" placeholder="Description"></textarea>
+        </div>
+      `,
+      confirmButtonText: 'Add',
+      focusConfirm: false,
+      showCancelButton: true,
+      preConfirm: () => {
+        const service_id = $('#service_id').val().trim();
+        const name = $('#name').val().trim();
+        const min = $('#min').val().trim();
+        const max = $('#max').val().trim();
+        const percentage = $('#percentage').val().trim();
+        const type = $('#type').val().trim();
+        const avg_time = $('#avg_time').val().trim();
+        const category = $('#category1').val();
+        const rate = $('#rate').val().trim();
+        const desc = $('#desc').val().trim();
+        const provider = $('#provider').val().trim();
+
+        if (!name || !service_id || !min || !max || !rate || !category || !percentage || !type || !avg_time || !provider) {
+          Swal.showValidationMessage('All fields except description are required.');
+        }
+
+        return {
+          service_id, name, min, max, rate, percentage, category, type, avg_time, desc , provider
+        };
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          url: '<?= base_url("admin/add") ?>',
+          method: 'POST',
+          data: result.value,
+          success: function (response) {
+            Swal.fire('Success!', 'Service added.', 'success')
+              .then(() => location.reload());
+          },
+          error: function () {
+            Swal.fire('Error!', 'Could not add service.', 'error');
+          }
+        });
+      }
+    });
+  });
+</script>
+
+
+
+
 <!-- jQuery Script -->
 <script>
 $(document).ready(function(){
@@ -301,6 +403,9 @@ $(document).ready(function(){
     });
 
 
+
+    
+
       // Handle Delete
 $('#DeleteSelected').click(function () {
     let selected = [];
@@ -362,6 +467,9 @@ $('#DeleteSelected').click(function () {
     });
 });
 });
+
+
+
 
 </script>
 

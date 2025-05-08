@@ -168,7 +168,7 @@ public function index()
                                         $apimodel = new Apimodel();
                                     
                                         $apimodel->tablename = 'services';
-                                        $select=array('id', 'service_id', 'name', 'category', 'rate', 'set_rate','percentage', 'min', 'max', 'type', 'desc');
+                                        $select=array('id', 'service_id', 'name', 'category','manual', 'rate', 'set_rate','percentage','avg_time', 'min', 'max', 'type','status', 'desc');
                                         $condition=array('is_deleted'=>'0');
                                         $services_count = count($apimodel->getMultipleData($condition,$select));
                                         $services = $apimodel->getMultipleData($condition,$select);
@@ -204,10 +204,42 @@ public function index()
                                      ];
                                     
                                         $this->load->view('admin/include/header',$data);
+                                        
                                         $this->load->view('admin/body');
                                         $this->load->view('admin/include/footer');
                                     }     
 			
+
+
+                                    public function add() {
+                                        $data = $this->input->post();
+                                    // print_r($data);
+                                        if (!empty($data['service_id']) && !empty($data['name'])) {
+                                            $insert = [
+                                                'service_id' => $data['service_id'],
+                                                'name' => $data['name'],
+                                                'min' => $data['min'],
+                                                'max' => $data['max'],
+                                                'rate' => $data['rate'],
+                                                'percentage' => $data['percentage'],
+                                                'category' => $data['category'],
+                                                'cname' => $data['provider'],
+                                                'type' => $data['type'],
+                                                'avg_time' => $data['avg_time'],
+                                                'desc' => $data['desc'],
+                                                'status' => 0,
+                                                'manual' => 1,
+                                                'set_rate' => $data['rate'] + ($data['rate'] * $data['percentage'] / 100)
+                                            ];
+                                            // log_message('debug',json_encode($insert));
+                                            $this->db->insert('services', $insert);
+                                            echo json_encode(['status' => 'success']);
+                                        } else {
+                                            show_error('Invalid input', 400);
+                                        }
+                                    }
+                                    
+
                         public function block()
                         {
 
@@ -342,7 +374,7 @@ public function editService($id)
 {
     $apimodel = new Apimodel();
     $apimodel->tablename = 'services';
-    $service = $apimodel->getSingleData(array('id' => $id,'status'=>'0','is_deleted'=>'0'),array('id','avg_time','percentage', 'service_id', 'name', 'category', 'rate', 'set_rate','category','min', 'max', 'type', 'desc'));
+    $service = $apimodel->getSingleData(array('id' => $id,'status'=>'0','is_deleted'=>'0'),array('id','avg_time','percentage', 'service_id', 'name','cname', 'category', 'rate', 'set_rate','category','min', 'max','manual', 'type', 'desc'));
     // $apimodel->tablename = 'categories';
     // $select='*';
     // $condition='';
@@ -352,6 +384,8 @@ public function editService($id)
         'row'=>'category'
     ];
     $categories = $apimodel->getGroupedCategories($data);
+
+
     $data=[
         'dashboard' => 'Services',
         'path' => 'Services/Edit',
@@ -507,7 +541,7 @@ public function editService($id)
                                             $condition=array('is_deleted'=>'0');
                                             $select=array('id','category_id','service_id','link','quantity','amount','user_id','created_at','orderId','status');
                                             $orders = $apimodel->getMultipleData($condition,$select);
-                                            $columns = array('Order id','User','Orde deatils','Status','Action');
+                                            // $columns = array('Order id','User','Orde deatils','Status','Action');
                                          
                                             $data=[
                                             'dashboard' => 'orders',
@@ -516,8 +550,8 @@ public function editService($id)
                                              'container'=>'1',
                                             'container'=>'0',
                                             'include'=> 'orders',
-                                            'orders'=>$orders,
-                                            'columns'=>$columns,
+                                            'orders'=>$orders
+                                            // 'columns'=>$columns,
                                          ];
                                         
                                             $this->load->view('admin/include/header',$data);

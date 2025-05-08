@@ -4,7 +4,7 @@
 
 
 <div class="overflow-x-auto">
-  <table id="myTable" class="min-w-full text-sm text-left text-gray-700 bg-white border border-gray-200 rounded-lg shadow-sm">
+  <table class="min-w-full text-sm text-left text-gray-700 bg-white border border-gray-200 rounded-lg shadow-sm">
     <thead class="text-xs text-gray-700 uppercase bg-gray-100">
       <tr>
         <th class="px-4 py-3 border-b"><input type="checkbox" id="selectAll" class="accent-blue-500"></th>
