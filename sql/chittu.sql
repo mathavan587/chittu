@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2025 at 02:04 PM
+-- Generation Time: May 09, 2025 at 02:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -1343,6 +1343,40 @@ INSERT INTO `services_import` (`id`, `service_id`, `name`, `cname`, `category`, 
 (1426, 3879, 'Spotify Saves [Track/Album] [Speed: 50-100K/Day] [Max: 1M] [30 Days Refill]', 'cheapsmmhub', 'Spotify Cheapest Services', 10, 19.34, 21.27, 100, 1000000, 'Default', '', '2025-05-08 03:42:12', '2025-05-08 03:42:12', 0, 0, 0, 0),
 (1427, 1, '💫 BUY YOUR OWN SMM PANEL ( READ DESCRIPTION ) [.SHOP]', 'cheapsmmhub', 'START YOUR ONLINE BUSINESS MAKE YOUR OWN SMM PANEL', 10, 449.10, 494.01, 1000, 1000, 'Package', '⭐ .SHOP DOMAIN \r\n\r\n⭐ CREAT YOUR OWN SMM PANEL\r\n\r\n⭐ FOR 1MONTH CHARGE IS 499Rs/\r\n\r\n⭐ FULL PANEL SETUP BY ADMIN\r\n \r\n⭐ 1MONTH DOMAIN + 1MONTH HOSTING\r\n\r\n⭐ 1MONTH SUPPORT FOR PANEL RELATED ISSUS\r\n\r\n⭐ DIRECT CALL SUPPORT WITH ADMIN\r\n\r\n⭐ MANY FEATURES AVILABLE ON PANEL\r\nREFFIIL / CHILD PANEL / AFFLIATE\r\n\r\n🚨 ITS A MONTHLY PLAN IF U WANT TO CONTINUE LIFETIME SO U CAN PAY EVERY MONTH RENT \r\n\r\n🚨 FOR MORE INFORMATION CALL US : 7991222146', '2025-05-08 03:42:12', '2025-05-08 03:42:12', 0, 0, 0, 0),
 (1428, 42, '💫 BUY YOUR OWN SMM PANEL ( READ DESCRIPTION ) [.COM]', 'cheapsmmhub', 'START YOUR ONLINE BUSINESS MAKE YOUR OWN SMM PANEL', 10, 2699.10, 2969.01, 1000, 1000, 'Package', '⭐ .COM DOMAIN \r\n\r\n⭐ CREAT YOUR OWN SMM PANEL\r\n\r\n⭐ FOR 1YEAR CHARGE IS 2999Rs/-\r\n\r\n⭐ FULL PANEL SETUP BY ADMIN\r\n \r\n⭐ 1YEAR DOMAIN + 1YEAR HOSTING\r\n\r\n⭐ 1YEAR SUPPORT FOR PANEL RELATED ISSUS\r\n\r\n⭐ DIRECT CALL SUPPORT WITH ADMIN\r\n\r\n⭐ MANY FEATURES AVILABLE ON PANEL\r\nREFFIIL / CHILD PANEL / AFFLIATE', '2025-05-08 03:42:12', '2025-05-08 03:42:12', 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tickets`
+--
+
+CREATE TABLE `tickets` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `request` varchar(100) NOT NULL,
+  `order_ids` text DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `status` varchar(50) DEFAULT 'Open',
+  `created_at` datetime DEFAULT current_timestamp(),
+  `is_deleted` tinyint(1) NOT NULL,
+  `view` tinyint(1) NOT NULL,
+  `message_id` varchar(500) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `tickets`
+--
+
+INSERT INTO `tickets` (`id`, `user_id`, `subject`, `request`, `order_ids`, `description`, `status`, `created_at`, `is_deleted`, `view`, `message_id`) VALUES
+(4, 12, 'Payment', 'Cancel', 'FWFWWWW', 'r2tr4 rw0rwerwe we09wewew efwe f\r\n', 'Open', '2025-05-08 18:26:36', 0, 0, ''),
+(3, 12, 'Payment', 'Cancel', 'FWFWWWW', 'QERQWERQWR', 'Open', '2025-05-08 18:06:26', 0, 0, '1'),
+(5, 12, 'Payment', 'Cancel', 'FWFWWWW', 'qqqwdqwqw', 'Open', '2025-05-08 18:30:19', 0, 0, ''),
+(6, 12, 'Other', 'Cancel', 'FWFWWWW', 'fwfwfwef', 'Open', '2025-05-08 18:30:28', 0, 0, ''),
+(7, 12, 'Payment', 'Cancel', 'FWFWWWW', 'dqqweqwqwqw qwqwdqwdqw dqwdqwdqw dqw dqwdq\r\n', 'Open', '2025-05-08 18:30:37', 0, 0, ''),
+(8, 12, 'Payment', 'Cancel', 'FWFWWWW', 'trwr0-wutw twr wwe9we wefwe9ufwef wefwe\r\n]\\', 'Open', '2025-05-08 18:36:04', 0, 0, ''),
+(9, 12, 'Payment', 'Refill', 'FWFWWWW', 'g9gw wgwwowef wewewewewer ', 'Open', '2025-05-08 18:36:13', 0, 0, ''),
+(10, 12, 'Payment', 'Cancel', 'FWFWWWW', 'ffewf ewfwef wefweewfwef', 'answered', '2025-05-08 18:46:22', 0, 0, '');
 
 -- --------------------------------------------------------
 
