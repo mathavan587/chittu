@@ -298,5 +298,9 @@ public function getMultipleDataJoin2($joins, $select, $condition) {
     $this->db->group_by($row);
     return $this->db->get()->result();
 }
+public function update($where, $data) {
+    return $this->db->update($this->tablename, $data, $where);
+}
+
 
 }

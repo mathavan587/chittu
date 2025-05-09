@@ -226,7 +226,6 @@ public function Transaction(){
     $condition=array('is_deleted'=>'0','user_id'=>$_SESSION['user_id']);
     $data['transaction'] = $apimodel->getMultipleData($condition,$select);
 
-
   
 
     $this->load->view('user/header',$data);
@@ -234,6 +233,40 @@ public function Transaction(){
     $this->load->view('user/footer');
 }
 
+public function tickets(){
+    $this->check_session();
+    $apimodel = new Apimodel();
+    $apimodel->tablename = 'orders';
+    $select=array('id','service_id','amount','user_id','created_at','paymentId');
+    $condition=array('is_deleted'=>'0','user_id'=>$_SESSION['user_id']);
+    $data['transaction'] = $apimodel->getMultipleData($condition,$select);
+
+
+    $apimodel->tablename = 'tickets';
+    $select=array('id','user_id','subject','request','order_ids','description','status','created_at');
+    $condition=array('user_id'=>$_SESSION['user_id']);
+    $data['tickets'] = $apimodel->getMultipleData($condition,$select);
+
+
+
+    $this->load->view('user/header',$data);
+    $this->load->view('user/tickets');
+    $this->load->view('user/footer');
+}
+
+public function store() {
+    $data = [
+        'user_id'     => $_SESSION['user_id'],
+        'subject'     => $this->input->post('subject'),
+        'request'     => $this->input->post('request'),
+        'order_ids'   => $this->input->post('order_ids'),
+        'description' => $this->input->post('description'),
+    ];
+
+    $this->db->insert('tickets', $data);
+    $this->session->set_flashdata('success', 'Ticket created successfully!');
+    redirect('tickets');
+}
 
 		
 		}

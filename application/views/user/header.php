@@ -79,6 +79,7 @@
       <a href="#" class="hover:text-blue-400">📊 Statistics</a>
       <a href="<?=base_url('user')?>" class="hover:text-blue-400">🛒 New Order</a>
       <a href="<?=base_url('transaction')?>" class="hover:text-blue-400">📃 Transaction logs</a>
+      <a href="<?=base_url('tickets')?>" class="hover:text-blue-400">📃 Tickets </a>
     </nav>
 
     <!-- Right Side -->

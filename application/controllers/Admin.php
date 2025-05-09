@@ -559,6 +559,106 @@ public function editService($id)
                                             $this->load->view('admin/include/footer');
                                         } 
 
+                                        public function tickets()
+                                        {
+                                            // Ensure the user is authenticated
+                                            $this->check_session();
+                                        
+                                            // Directly query the database (no model)
+                                            $this->db->select('*');
+                                            $this->db->from('tickets');
+                                            $this->db->where('is_deleted', 0);
+                                            $query = $this->db->get();
+                                        
+                                            // Get result as an array of objects
+                                            $tickets = $query->result();
+                                        
+                                            // OPTIONAL: Debug output
+                                            // echo '<pre>'; print_r($tickets); exit;
+                                        
+                                            // Pass data to view
+                                            $data = [
+                                                'dashboard' => 'Tickets',
+                                                'path' => 'General/Tickets',
+                                                'content' => '',
+                                                'container' => '0',
+                                                'include' => 'tickets', // Will load 'application/views/admin/tickets.php'
+                                                'tickets' => $tickets
+                                            ];
+                                        
+                                            // Load the views
+                                            $this->load->view('admin/include/header', $data);
+                                            $this->load->view('admin/body');
+                                            $this->load->view('admin/include/footer');
+                                        }
+
+
+                                        public function change_status()
+{
+    $input = json_decode($this->input->raw_input_stream, true);
+    $ticket_id = $input['id'] ?? null;
+    $new_status = $input['status'] ?? null;
+
+    if ($ticket_id && $new_status) {
+        $this->db->where('id', $ticket_id);
+        $updated = $this->db->update('tickets', ['status' => $new_status]);
+
+        if ($updated) {
+            echo json_encode(['status' => 'success', 'message' => 'Status updated successfully']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Database update failed']);
+        }
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid request']);
+    }
+}
+
+
+public function reply_or_close($ticket_id) {
+    $action = $this->input->post('action');
+    $message = $this->input->post('message');
+
+    if ($action === 'reply' && !empty($message)) {
+        // Save the reply message
+        $data = [
+            'ticket_id' => $ticket_id,
+            'message' => $message,
+            'created_at' => date('Y-m-d H:i:s')
+        ];
+        $this->db->insert('messages', $data);
+        $this->db->where('id', $ticket_id)->update('tickets', ['status' => 'closed']);
+        $this->session->set_flashdata('success', 'Reply sent.');
+    } elseif ($action === 'close') {
+        // Mark the ticket as closed
+        $this->session->set_flashdata('success', 'Ticket closed.');
+    }
+
+    redirect('admin/view/' . $ticket_id);
+}
+
+
+public function view($id)
+{
+    $ticket = $this->db->get_where('tickets', ['id' => $id, 'is_deleted' => 0])->row();
+
+    // $ticket = $this->db->get_where('tickets', ['id' => $id,'tickets_id'=>$ticket->id ,'is_deleted' => 0])->row();
+
+    if (!$ticket) {
+        show_404(); // Or redirect with error message
+    }
+
+    $data = [
+        'dashboard' => 'View Ticket',
+        'path' => 'General/View Ticket',
+        'ticket' => $ticket,
+        'include' => 'tickets/view',
+        'container' => '0'
+    ];
+
+    $this->load->view('admin/include/header', $data);
+    $this->load->view('admin/body');
+    $this->load->view('admin/include/footer');
+}
 
             
                 public function delete_categorie() 
@@ -606,7 +706,7 @@ public function editService($id)
                     'path' => 'Categories/Edit',
                     'content'=>'0',
                     'include'=> 'categories_edit',
-                    'service'=>$service,
+                    'service'=>$service,    
                     'categories'=>$categories
                 ];
                     $this->load->view('admin/include/header',$data);
@@ -764,6 +864,7 @@ public function editService($id)
             }
             
 
+
             public function categories_delete()
             {
 
@@ -792,5 +893,27 @@ $data=[
                 // $this->load->view('services_table'); // View will only contain the table
             }
             
+            public function update_status() {
+                $id = $this->input->post('id');
+                $status = $this->input->post('status');
+            
+                if (!$id || !$status) {
+                    echo json_encode(['success' => false, 'message' => 'Missing data']);
+                    return;
+                }
+            
+                $this->load->model('Apimodel'); // adjust if your model is named differently
+                $this->Apimodel->tablename = 'orders';  
+                $updated = $this->Apimodel->update(['id' => $id], ['status' => $status]);
+            
+                if ($updated) {
+                    echo json_encode(['success' => true]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'DB update failed']);
+                }
+            }
+
+            
+
             
 		}

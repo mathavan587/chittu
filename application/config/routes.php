@@ -64,6 +64,7 @@ $route['auth'] = 'auth/login';
 //user conntroller
 $route['user'] = 'User/index';
 $route['transaction'] = 'User/Transaction';
+$route['tickets'] = 'User/tickets';
 // $route['Statistics'] = 'User';
 //user conntroller
 $route['logout'] = 'User/logout';
@@ -93,6 +94,7 @@ $route['import'] = 'Admin/import';
 $route['categories'] = 'Admin/categories';
 $route['providers'] = 'Admin/providers';
 $route['orders'] = 'Admin/orders';
+$route['tickets'] = 'Admin/tickets';
 $route['admin/categories_delete'] = 'admin/categories_delete';
 $route['create'] = 'admin/create';
 
