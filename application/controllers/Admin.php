@@ -618,21 +618,21 @@ public function reply_or_close($ticket_id) {
     $action = $this->input->post('action');
     $message = $this->input->post('message');
 
-    if ($action === 'reply' && !empty($message)) {
-        // Save the reply message
+//  log_message('debug',json_encode($_REQUEST));
+
+    // if ($action === 'reply' && !empty($message)) {
+    //     // Save the reply message
         $data = [
             'ticket_id' => $ticket_id,
             'message' => $message,
             'created_at' => date('Y-m-d H:i:s')
         ];
-        $this->db->insert('messages', $data);
-        $this->db->where('id', $ticket_id)->update('tickets', ['status' => 'closed']);
-        $this->session->set_flashdata('success', 'Reply sent.');
-    } elseif ($action === 'close') {
-        // Mark the ticket as closed
-        $this->session->set_flashdata('success', 'Ticket closed.');
-    }
+        // print_r($data);  
 
+        $apimodel = new Apimodel();
+        $apimodel->tablename = 'message';
+         $insert = $apimodel->insertData($data);
+        $update=$this->db->where('id', $ticket_id)->update('tickets', ['status' => 'closed','message_id'=>$insert]);
     redirect('admin/view/' . $ticket_id);
 }
 

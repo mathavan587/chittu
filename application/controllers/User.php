@@ -243,7 +243,7 @@ public function tickets(){
 
 
     $apimodel->tablename = 'tickets';
-    $select=array('id','user_id','subject','request','order_ids','description','status','created_at');
+    $select=array('id','user_id','subject','request','order_ids','description','status','message_id','created_at');
     $condition=array('user_id'=>$_SESSION['user_id']);
     $data['tickets'] = $apimodel->getMultipleData($condition,$select);
 
@@ -253,6 +253,18 @@ public function tickets(){
     $this->load->view('user/tickets');
     $this->load->view('user/footer');
 }
+
+
+public function get_ticket($id) {
+    $ticket = $this->db->get_where('tickets', ['id' => $id])->row();
+
+    if ($ticket) {
+        echo json_encode($ticket);
+    } else {
+        echo json_encode(['error' => 'Ticket not found']);
+    }
+}
+
 
 public function store() {
     $data = [

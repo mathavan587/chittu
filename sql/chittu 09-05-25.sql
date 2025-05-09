@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 09, 2025 at 03:03 AM
--- Server version: 9.1.0
--- PHP Version: 8.2.12
+-- Generation Time: May 09, 2025 at 02:04 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,15 +24,36 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `blogs`
+--
+
+CREATE TABLE `blogs` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `image` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `blogs`
+--
+
+INSERT INTO `blogs` (`id`, `title`, `content`, `image`, `created_at`) VALUES
+(3, 'wpjfpefre q', 'er[pjreg[pgjrepregre\r\nergergrepgjregre\r\ngregrep', '25dfd2e7fc0e1662790871f1c8f9aa70.png', '2025-05-09 14:03:19');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `categories`
 --
 
 CREATE TABLE `categories` (
-  `id` int NOT NULL,
-  `categories` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `percentage` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `categories` varchar(500) NOT NULL,
+  `percentage` int(11) NOT NULL,
   `is_deleted` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -42,11 +63,11 @@ CREATE TABLE `categories` (
 --
 
 CREATE TABLE `categories_import` (
-  `id` int NOT NULL,
-  `categories` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `percentage` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `categories` varchar(500) NOT NULL,
+  `percentage` int(11) NOT NULL,
   `is_deleted` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -173,11 +194,11 @@ INSERT INTO `categories_import` (`id`, `categories`, `percentage`, `is_deleted`,
 --
 
 CREATE TABLE `import_logs` (
-  `id` int NOT NULL,
-  `api_url` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `api_key` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `cname` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `id` int(11) NOT NULL,
+  `api_url` varchar(500) NOT NULL,
+  `api_key` varchar(500) NOT NULL,
+  `cname` varchar(500) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -187,10 +208,10 @@ CREATE TABLE `import_logs` (
 --
 
 CREATE TABLE `logs` (
-  `id` int NOT NULL,
-  `email` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `mobile` varchar(15) COLLATE utf8mb4_general_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `id` int(11) NOT NULL,
+  `email` varchar(500) NOT NULL,
+  `mobile` varchar(15) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -226,7 +247,15 @@ INSERT INTO `logs` (`id`, `email`, `mobile`, `created_at`) VALUES
 (26, 'vmathavan587@gmail.com', '8148668359', '2025-05-08 13:41:00'),
 (27, 'vmathavan587@gmail.com', '8148668359', '2025-05-08 13:42:52'),
 (28, 'vmathavan587@gmail.com', '8148668359', '2025-05-08 13:43:40'),
-(29, 'mano@gmail.com', '9887766554', '2025-05-08 20:25:24');
+(29, 'mano@gmail.com', '9887766554', '2025-05-08 20:25:24'),
+(30, 'mano@gmail.com', '9887766554', '2025-05-09 05:51:30'),
+(31, 'vmathavan587@gmail.com', '8148668359', '2025-05-09 06:34:56'),
+(32, 'vmathavan587@gmail.com', '8148668359', '2025-05-09 06:35:11'),
+(33, 'vmathavan587@gmail.com', '8148668359', '2025-05-09 06:36:39'),
+(34, 'vmathavan587@gmail.com', '8148668359', '2025-05-09 06:37:08'),
+(35, 'vmathavan587@gmail.com', '8148668359', '2025-05-09 06:37:57'),
+(36, 'vmathavan587@gmail.com', '8148668359', '2025-05-09 06:39:19'),
+(37, 'mano@gmail.com', '9887766554', '2025-05-09 07:05:23');
 
 -- --------------------------------------------------------
 
@@ -235,18 +264,24 @@ INSERT INTO `logs` (`id`, `email`, `mobile`, `created_at`) VALUES
 --
 
 CREATE TABLE `message` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `message` varchar(500) NOT NULL,
-  `tickets_id` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `created_at` timestamp NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `ticket_id` varchar(500) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `message`
 --
 
-INSERT INTO `message` (`id`, `message`, `tickets_id`, `created_at`) VALUES
-(1, 'dsfdsfsdfdfc efee fwefwerfw reftrwerwrewwfwewefsdfsdsdsdvs wrefwrwrewrefw', '12', '2025-05-09 00:49:24');
+INSERT INTO `message` (`id`, `message`, `ticket_id`, `created_at`) VALUES
+(1, 'wljofjwfwe', '10', '2025-05-09 05:29:48'),
+(2, 'wljofjwfwe', '10', '2025-05-09 05:30:34'),
+(3, 'wljofjwfwe', '10', '2025-05-09 05:31:32'),
+(4, 'wfnewfkwenfw', '10', '2025-05-09 06:27:15'),
+(5, 'wfnewfkwenfw', '10', '2025-05-09 06:31:48'),
+(6, 'wfnewfkwenfw', '10', '2025-05-09 06:32:35'),
+(7, 'eofreofierjfpremgfeg \r\nefrefreerreoreg rgreogreg regregore', '4', '2025-05-09 06:33:27');
 
 -- --------------------------------------------------------
 
@@ -255,18 +290,18 @@ INSERT INTO `message` (`id`, `message`, `tickets_id`, `created_at`) VALUES
 --
 
 CREATE TABLE `orders` (
-  `id` int NOT NULL,
-  `category_id` text COLLATE utf8mb4_general_ci NOT NULL,
-  `service_id` text COLLATE utf8mb4_general_ci NOT NULL,
-  `link` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `quantity` int NOT NULL,
-  `amount` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `user_id` int NOT NULL,
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `paymentId` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `orderId` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `signature` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `status` enum('completed','processing','in progress','pending','partial','cancelled') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `id` int(11) NOT NULL,
+  `category_id` text NOT NULL,
+  `service_id` text NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `amount` varchar(500) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  `paymentId` varchar(500) NOT NULL,
+  `orderId` varchar(500) NOT NULL,
+  `signature` varchar(500) NOT NULL,
+  `status` enum('completed','processing','in progress','pending','partial','cancelled') NOT NULL,
   `is_deleted` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -288,21 +323,21 @@ INSERT INTO `orders` (`id`, `category_id`, `service_id`, `link`, `quantity`, `am
 --
 
 CREATE TABLE `services` (
-  `id` int NOT NULL,
-  `service_id` int NOT NULL,
-  `name` text COLLATE utf8mb4_unicode_ci,
-  `cname` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category` text COLLATE utf8mb4_unicode_ci,
-  `percentage` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `service_id` int(11) NOT NULL,
+  `name` text DEFAULT NULL,
+  `cname` varchar(500) NOT NULL,
+  `category` text DEFAULT NULL,
+  `percentage` int(11) NOT NULL,
   `rate` decimal(10,2) DEFAULT NULL,
   `set_rate` decimal(10,2) NOT NULL,
-  `min` int DEFAULT NULL,
-  `max` int DEFAULT NULL,
-  `type` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `desc` text COLLATE utf8mb4_unicode_ci,
-  `avg_time` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Not Enough Data',
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `min` int(11) DEFAULT NULL,
+  `max` int(11) DEFAULT NULL,
+  `type` varchar(50) DEFAULT NULL,
+  `desc` text DEFAULT NULL,
+  `avg_time` varchar(500) NOT NULL DEFAULT 'Not Enough Data',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `is_deleted` tinyint(1) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `manual` tinyint(1) NOT NULL
@@ -803,20 +838,20 @@ INSERT INTO `services` (`id`, `service_id`, `name`, `cname`, `category`, `percen
 --
 
 CREATE TABLE `services_import` (
-  `id` int NOT NULL,
-  `service_id` int NOT NULL,
-  `name` text COLLATE utf8mb4_unicode_ci,
-  `cname` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category` text COLLATE utf8mb4_unicode_ci,
-  `percentage` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `service_id` int(11) NOT NULL,
+  `name` text DEFAULT NULL,
+  `cname` varchar(500) NOT NULL,
+  `category` text DEFAULT NULL,
+  `percentage` int(11) NOT NULL,
   `rate` decimal(10,2) DEFAULT NULL,
   `set_rate` decimal(10,2) NOT NULL,
-  `min` int DEFAULT NULL,
-  `max` int DEFAULT NULL,
-  `type` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `desc` text COLLATE utf8mb4_unicode_ci,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `min` int(11) DEFAULT NULL,
+  `max` int(11) DEFAULT NULL,
+  `type` varchar(50) DEFAULT NULL,
+  `desc` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `is_deleted` tinyint(1) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `imported` tinyint(1) NOT NULL,
@@ -1312,52 +1347,18 @@ INSERT INTO `services_import` (`id`, `service_id`, `name`, `cname`, `category`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tickets`
---
-
-CREATE TABLE `tickets` (
-  `id` int NOT NULL,
-  `user_id` int NOT NULL,
-  `subject` varchar(255) NOT NULL,
-  `request` varchar(100) NOT NULL,
-  `order_ids` text,
-  `description` text,
-  `status` varchar(50) DEFAULT 'Open',
-  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
-  `is_deleted` tinyint(1) NOT NULL,
-  `view` tinyint(1) NOT NULL,
-  `message_id` varchar(500) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `tickets`
---
-
-INSERT INTO `tickets` (`id`, `user_id`, `subject`, `request`, `order_ids`, `description`, `status`, `created_at`, `is_deleted`, `view`, `message_id`) VALUES
-(4, 12, 'Payment', 'Cancel', 'FWFWWWW', 'r2tr4 rw0rwerwe we09wewew efwe f\r\n', 'Open', '2025-05-08 18:26:36', 0, 0, ''),
-(3, 12, 'Payment', 'Cancel', 'FWFWWWW', 'QERQWERQWR', 'Open', '2025-05-08 18:06:26', 0, 0, '1'),
-(5, 12, 'Payment', 'Cancel', 'FWFWWWW', 'qqqwdqwqw', 'Open', '2025-05-08 18:30:19', 0, 0, ''),
-(6, 12, 'Other', 'Cancel', 'FWFWWWW', 'fwfwfwef', 'Open', '2025-05-08 18:30:28', 0, 0, ''),
-(7, 12, 'Payment', 'Cancel', 'FWFWWWW', 'dqqweqwqwqw qwqwdqwdqw dqwdqwdqw dqw dqwdq\r\n', 'Open', '2025-05-08 18:30:37', 0, 0, ''),
-(8, 12, 'Payment', 'Cancel', 'FWFWWWW', 'trwr0-wutw twr wwe9we wefwe9ufwef wefwe\r\n]\\', 'Open', '2025-05-08 18:36:04', 0, 0, ''),
-(9, 12, 'Payment', 'Refill', 'FWFWWWW', 'g9gw wgwwowef wewewewewer ', 'Open', '2025-05-08 18:36:13', 0, 0, ''),
-(10, 12, 'Payment', 'Cancel', 'FWFWWWW', 'ffewf ewfwef wefweewfwef', 'answered', '2025-05-08 18:46:22', 0, 0, '');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
-  `id` int NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `email` varchar(150) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `mobile` varchar(15) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `email` varchar(150) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `mobile` varchar(15) DEFAULT NULL,
   `status` tinyint(1) DEFAULT NULL,
-  `otp` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `usertype` varchar(20) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `otp` varchar(20) DEFAULT NULL,
+  `usertype` varchar(20) DEFAULT NULL,
   `is_deleted` tinyint(1) DEFAULT NULL,
   `modified_at` date DEFAULT NULL,
   `created_at` date DEFAULT NULL
@@ -1378,14 +1379,20 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `mobile`, `status`, `otp
 --
 
 CREATE TABLE `verification` (
-  `id` int NOT NULL,
-  `email` varchar(500) COLLATE utf8mb4_general_ci NOT NULL,
-  `otp` int NOT NULL
+  `id` int(11) NOT NULL,
+  `email` varchar(500) NOT NULL,
+  `otp` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `blogs`
+--
+ALTER TABLE `blogs`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `categories`
@@ -1436,13 +1443,6 @@ ALTER TABLE `services_import`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tickets`
---
-ALTER TABLE `tickets`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -1462,70 +1462,46 @@ ALTER TABLE `verification`
 --
 
 --
+-- AUTO_INCREMENT for table `blogs`
+--
+ALTER TABLE `blogs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `categories_import`
 --
 ALTER TABLE `categories_import`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `import_logs`
 --
 ALTER TABLE `import_logs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `logs`
 --
 ALTER TABLE `logs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT for table `services`
---
-ALTER TABLE `services`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=517;
-
---
--- AUTO_INCREMENT for table `services_import`
---
-ALTER TABLE `services_import`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1429;
-
---
--- AUTO_INCREMENT for table `tickets`
---
-ALTER TABLE `tickets`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
-
---
--- AUTO_INCREMENT for table `verification`
---
-ALTER TABLE `verification`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

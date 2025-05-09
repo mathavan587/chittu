@@ -50,28 +50,18 @@
         </div>
       </div>
 
-
+                
 <?php 
 if ($ticket->message_id) {
     $message = $this->db->get_where('message', ['id' => $ticket->message_id])->row();
-
-
-    // print_r($message);
-
-# code... ?>
-
+  ?>
       <div class="flex justify-end ?>">
         <div class="bg-blue-100 text-blue-900  p-3 rounded-lg max-w-xs shadow">
           <p class="text-sm"><?= nl2br(htmlspecialchars($message->message)) ?></p>
           <span class="block text-xs text-gray-500 mt-1"><?= date('d M Y, h:i A', strtotime($message->created_at)) ?></span>
         </div>
       </div>
-<?php 
-}
-?>
-      
-
-    <?php // endforeach; ?>
+<?php } ?>
   </div>
 
   <!-- Message Form -->
