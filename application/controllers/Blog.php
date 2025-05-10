@@ -7,6 +7,8 @@ class Blog extends CI_Controller {
 			$this->load->helper('form'); // (optional) Load form helper if using forms
 			$this->load->library('session'); // (optional) if using flashdata
 			$this->load->model('Blog_model');
+			$this->load->model('apimodel');
+
 
 		}
         public function check_session()

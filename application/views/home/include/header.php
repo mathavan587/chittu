@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+
+<?php
+    $apimodel = new Apimodel();
+                $apimodel->tablename = 'settings';
+                $select=array('file_name');
+                $condition=array('categories'=>'title');
+                $link = $apimodel->getSingleData($condition,$select);
+                 $title = $link->file_name;
+?>
+<meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="<?=base_url('uploads/'.$title)?>">
   <title>Chittu SMM Panel - Social Media Marketing Solutions</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
@@ -19,6 +29,7 @@
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
     }
   </style>
+    <link rel="icon" type="image/x-icon" href="<?=base_url('uploads/'.$title)?>">
   <script>
     function showLoginModal() {
       document.getElementById('loginModal').classList.remove('hidden');

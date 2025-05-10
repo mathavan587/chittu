@@ -4,6 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard</title>
+<?php
+                $apimodel = new Apimodel();
+                $apimodel->tablename = 'settings';
+                $select=array('file_name');
+                $condition=array('categories'=>'title');
+                $link = $apimodel->getSingleData($condition,$select);
+                 $title = $link->file_name;
+
+                   $condition=array('categories'=>'dashboard');
+                $link = $apimodel->getSingleData($condition,$select);
+                 $Dashboard = $link->file_name;
+?>
+
+  <link rel="icon" type="image/x-icon" href="<?=base_url('uploads/'.$title)?>">
     <script src="https://cdn.tailwindcss.com"></script>
     <link
       href="https://cdn.jsdelivr.net/npm/heroicons@2.1.3/24/outline/heroicons.css"
@@ -77,16 +91,22 @@
         class="sidebar fixed inset-y-0 left-0 w-64 bg-gray-800 text-white p-4 space-y-6 overflow-y-auto hidden md:block shadow-lg z-20"
       >
         <a href="#" class="flex items-center space-x-2 px-2">
-          <svg
+
+
+        <?php 
+        // $r=base_url('uploads/circle-heat.svg');
+        // log_message('debug',$r); ?>
+          <!-- <svg
             class="h-8 w-auto text-indigo-400"
             viewBox="0 0 24 24"
             fill="currentColor"
-            xmlns="http://www.w3.org/2000/svg"
+            xmlns="<?=base_url('uploads/circle-heat.svg')?>"
           >
             <path
               d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
             ></path>
-          </svg>
+          </svg> -->
+          <img  class="h-8 w-auto text-indigo-400"8 src="<?=base_url('uploads/'.$Dashboard)?>" alt="">
           <span class="text-2xl font-bold">Dashboard</span>
         </a>
         <nav class="space-y-2">
@@ -313,6 +333,29 @@
             Announcements
           </a>
 
+
+
+             <a
+            href="<?=base_url('Settings')?>"
+            class="flex items-center px-2 py-2 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 hover:text-white group"
+          >
+            <svg
+              class="icon"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z"
+              />
+            </svg>
+            Settings
+          </a>
+
           
           <div class="mt-auto"> <a
             href="<?=base_url('logout')?>"
@@ -446,3 +489,4 @@
               </h2>
               <?php } ?>
               <p class="text-gray-600">
+              

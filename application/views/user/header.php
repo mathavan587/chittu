@@ -3,6 +3,19 @@
     <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <?php
+    $apimodel = new Apimodel();
+                $apimodel->tablename = 'settings';
+                $select=array('file_name');
+                $condition=array('categories'=>'title');
+                $link = $apimodel->getSingleData($condition,$select);
+                 $title = $link->file_name;
+?>
+
+    <link rel="icon" type="image/x-icon" href="<?=base_url('uploads/'.$title)?>">
+
+
     <title>Chittu SMM Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />

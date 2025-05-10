@@ -40,11 +40,20 @@ public function index()
                 $select=array('id');
                 $condition=array('is_deleted'=>'0');
                 $services_count = count($apimodel->getMultipleData($condition,$select));
+
                 $apimodel->tablename = 'categories';
                 $select='*';
                 // $condition='';
                 $condition=array('is_deleted'=>'0');
                 $categories_count = count($apimodel->getMultipleData($condition,$select));
+
+
+                $apimodel->tablename = 'services';
+                $select=array('id');
+                $condition=array('is_deleted'=>'0');
+                $services_count = count($apimodel->getMultipleData($condition,$select));
+
+     
                 $data=[
                 'dashboard' => 'Dashboard',
                 'path' => 'General/Dashboard',
@@ -54,7 +63,7 @@ public function index()
                 'user_count'=>$user_count,
                 'orders_count'=>$orders_count,
                 'services_count'=>$services_count,
-                'categories_count'=>$categories_count
+                'categories_count'=>$categories_count,
              ];
             
 				$this->load->view('admin/include/header',$data);
