@@ -22,6 +22,8 @@ class Blog extends CI_Controller {
     // Otherwise, continue
 }
 public function index() {
+                $this->check_session();
+
         $blogs= $this->Blog_model->get_all();
 
            $data=[
@@ -41,6 +43,8 @@ public function index() {
     }
 
     public function create() {
+                $this->check_session();
+
         // $this->load->view('admin/blog/create');
 
 $data=[
@@ -61,6 +65,8 @@ $data=[
 
    public function store()
 {
+                $this->check_session();
+
     // Load the upload library with config
     $config['upload_path'] = './uploads/blogs/';
     $config['allowed_types'] = 'gif|jpg|png|jpeg|webp';
@@ -100,6 +106,8 @@ $data=[
 
 
     public function edit($id) {
+                $this->check_session();
+
         $blog = $this->Blog_model->get($id);
         $data=[
                 'dashboard' => 'Dashboard',
@@ -120,6 +128,8 @@ $data=[
     }
 
     public function update($id) {
+                $this->check_session();
+
         $data = [
             'title' => $this->input->post('title'),
             'content' => $this->input->post('content'),
@@ -129,6 +139,8 @@ $data=[
     }
 
     public function delete($id) {
+                $this->check_session();
+
         $this->Blog_model->delete($id);
         redirect('blog');
     }
