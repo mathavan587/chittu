@@ -27,43 +27,29 @@
 			*/
 			public function index()
 			{
-
-			    $apimodel = new Apimodel();
-                                    
-                                        $apimodel->tablename = 'services';
-                                        $select=array('id', 'service_id', 'name', 'category', 'rate', 'set_rate','percentage', 'min', 'max', 'type','avg_time', 'desc');
-                                        $condition=array('is_deleted'=>'0');
-                                        $services_count = count($apimodel->getMultipleData($condition,$select));
-                                        $services = $apimodel->getMultipleData($condition,$select);
- 
-				$data=[
-					// 'dashboard' => 'Services',
-					// 'path' => 'General/Services',
-					// 'content'=>'',
-					//  'container'=>'1',
-					// 'container'=>'0',
-					// 'include'=> 'Services',
-					// 'services_count'=>$services_count,
-					'services'=>$services,
-					// 'names'=>$names,
-					// 'cname'=>$cname,
-					// 'services_import'=>$services_import
+			$data=[
+		            'title'=>'home',
+					'include'=> 'body',
+					// 'services'=>$services,
 				 ];
-
-
-
 				 
-				$this->load->view('home/include/header');
-				$this->load->view('home/body',$data);
+				$this->load->view('home/include/header',$data);
+				$this->load->view('home/body');
 				$this->load->view('home/include/footer');
 			}
 			
 			public function signup(){
 				$data=array(
 					'title'=>'Sign up',
-					'carde_title'=>'Create Account'
+					'carde_title'=>'Create Account',
+					'include'=> 'registration',
+					'services'=>$services
 				);
-				$this->load->view('registration',$data);
+
+				$this->load->view('home/include/header',$data);
+				$this->load->view('home/body');
+				$this->load->view('home/include/footer');
+				// $this->load->view('registration',$data);
 			}
 			public function register()
 		{
@@ -103,11 +89,18 @@ public function sendmail($id=null){
 
 public function verification(){
 
+
 	$data=array(
-		'title'=>'verification eamil id',
-		'carde_title'=>'Account verify'
+		            'title'=>'verification',
+					'include'=> 'verification',
+             		'carde_title'=>'Account verify'		
+					// 'services'=>$services,
 	);
-	$this->load->view('verification',$data);
+				 
+				$this->load->view('home/include/header',$data);
+				$this->load->view('home/body');
+				$this->load->view('home/include/footer');
+	// $this->load->view('verification',$data);
 }
 
 public function verify(){
@@ -144,14 +137,69 @@ public function login(){
 		redirect('admin'); // No need for return, just call redirect
 			
 		}
+		$data=array(
+		            'title'=>'Login',
+		            'carde_title'=>'Login Account',
+					'include'=> 'login',
+					// 'services'=>$services
+				);
 
-	$data=array(
-		'title'=>'Login',
-		'carde_title'=>'Login Account'
-	);
+					$this->load->view('home/include/header',$data);
+				$this->load->view('home/body');
+				$this->load->view('home/include/footer');
+			
 
-	$this->load->view('login',$data);
+
+
+	// $this->load->view('login',$data);
 }
-		
+public function services(){
+
+			
+	  $apimodel = new Apimodel();
+                                    
+                                        $apimodel->tablename = 'services';
+                                        $select=array('id', 'service_id', 'name', 'category', 'rate', 'set_rate','percentage', 'min', 'max', 'type','avg_time', 'desc');
+                                        $condition=array('is_deleted'=>'0');
+                                        $services_count = count($apimodel->getMultipleData($condition,$select));
+                                        $services = $apimodel->getMultipleData($condition,$select);
+	$data=array(
+		            'title'=>'services',
+					'include'=> 'services',
+					'services'=>$services
+				);
+
+				$this->load->view('home/include/header',$data);
+				$this->load->view('home/body');
+				$this->load->view('home/include/footer');
+}
+
+
+	public function about()
+			{
+			$data=[
+		            'title'=>'About',
+					'include'=> 'about',
+					// 'services'=>$services,
+				 ];
+				 
+				$this->load->view('home/include/header',$data);
+				$this->load->view('home/body');
+				$this->load->view('home/include/footer');
+			}
+
+
+			public function contact()
+			{	
+			$data=[
+		            'title'=>'Contact',
+					'include'=> 'contact',
+					// 'services'=>$services,
+				 ];
+				 
+				$this->load->view('home/include/header',$data);
+				$this->load->view('home/body');
+				$this->load->view('home/include/footer');
+			}
 		
 		}

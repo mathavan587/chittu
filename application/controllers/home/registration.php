@@ -1,21 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= $title ?></title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-</head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+
+  <!-- <section class="relative gradient-bg text-white py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"> -->
+  <section class="py-12 bg-gray-50 min-h-screen flex justify-center items-center">
+  
   <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-6 md:p-8">
 
     <!-- Success Alert -->
     <div id="successAlert" class="hidden bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 flex items-center justify-between">
       <div>
         <span class="font-bold">Success!</span>
-        <span class="block sm:inline">Your account has been verified.</span>
+        <span class="block sm:inline">Your account has been created.</span>
       </div>
       <button type="button" class="close-alert text-green-700">
         <i class="fas fa-times"></i>
@@ -48,7 +41,7 @@
 
     <form id="userform" method="POST" class="space-y-6">
       <!-- Username Field -->
-      <!-- <div class="space-y-1">
+      <div class="space-y-1">
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-500">
             <i class="fas fa-user"></i>
@@ -57,10 +50,10 @@
             class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
         </div>
         <div id="nameError" class="text-xs text-red-500 mt-1 hidden"></div>
-      </div> -->
+      </div>
 
       <!-- Mobile Field -->
-      <!-- <div class="space-y-1">
+      <div class="space-y-1">
         <div class="relative">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-500">
             <i class="fas fa-mobile-alt"></i>
@@ -69,7 +62,7 @@
             class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
         </div>
         <div id="mobileError" class="text-xs text-red-500 mt-1 hidden"></div>
-      </div> -->
+      </div>
 
       <!-- Email Field -->
       <div class="space-y-1">
@@ -89,20 +82,20 @@
           <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-500">
             <i class="fas fa-lock"></i>
           </span>
-          <input type="password" name="otp" id="password" placeholder="••••••••"
+          <input type="password" name="password" id="password" placeholder="••••••••"
             class="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
           <button type="button" id="togglePassword"
             class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-600 hover:text-gray-800">
             <i id="passwordIcon" class="fas fa-eye"></i>
           </button>
         </div>
-    </div>
-    <div id="passwordError" class="text-xs text-red-500 mt-1 hidden"></div>
+        <div id="passwordError" class="text-xs text-red-500 mt-1 hidden"></div>
+      </div>
 
       <!-- Submit Buttons -->
       <button type="submit" id="submitBtn"
         class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 text-white py-3 px-4 rounded-lg font-medium hover:shadow-lg transition">
-        Login
+        Create Account
       </button>
 
       <button type="button" id="submittingBtn" class="hidden w-full bg-indigo-600 text-white py-3 px-4 rounded-lg font-medium opacity-70 cursor-not-allowed">
@@ -116,25 +109,14 @@
       </button>
 
       <!-- Login Redirect -->
-      <!-- <p class="text-center text-gray-600 text-sm mt-6">
-        Already have an account? <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium">Log in</a>
-      </p> -->
+      <p class="text-center text-gray-600 text-sm mt-6">
+        Already have an account? <a href="<?=base_url('login')?>" class="text-indigo-600 hover:text-indigo-800 font-medium">Log in</a>
+      </p>
     </form>
   </div>
-
- 
-</body>
-</html>
-
-<!-- SweetAlert2 CSS (optional, for styling) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-
-<!-- SweetAlert2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     </section>
  <!-- Scripts -->
  <script>
-
-
     $(document).ready(function () {
       // Password toggle
       $('#togglePassword').click(function () {
@@ -158,20 +140,19 @@
       function validateForm() {
         let isValid = true;
 
-        // $('#nameError, #emailError, #mobileError, #passwordError').addClass('hidden').text('');
-        $('#emailError, #passwordError').addClass('hidden').text('');
+        $('#nameError, #emailError, #mobileError, #passwordError').addClass('hidden').text('');
         $('input').removeClass('border-red-500');
 
-        // const name = $('#name').val().trim();
-        // if (!name) {
-        //   $('#nameError').text('Username is required').removeClass('hidden');
-        //   $('#name').addClass('border-red-500');
-        //   isValid = false;
-        // } else if (name.includes(' ')) {
-        //   $('#nameError').text('Username cannot contain spaces').removeClass('hidden');
-        //   $('#name').addClass('border-red-500');
-        //   isValid = false;
-        // }
+        const name = $('#name').val().trim();
+        if (!name) {
+          $('#nameError').text('Username is required').removeClass('hidden');
+          $('#name').addClass('border-red-500');
+          isValid = false;
+        } else if (name.includes(' ')) {
+          $('#nameError').text('Username cannot contain spaces').removeClass('hidden');
+          $('#name').addClass('border-red-500');
+          isValid = false;
+        }
 
         const email = $('#email').val();
         if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
@@ -180,12 +161,12 @@
           isValid = false;
         }
 
-        // const mobile = $('#mobile').val();
-        // if (!/^\d{10}$/.test(mobile)) {
-        //   $('#mobileError').text('Enter a valid 10-digit number').removeClass('hidden');
-        //   $('#mobile').addClass('border-red-500');
-        //   isValid = false;
-        // }
+        const mobile = $('#mobile').val();
+        if (!/^\d{10}$/.test(mobile)) {
+          $('#mobileError').text('Enter a valid 10-digit number').removeClass('hidden');
+          $('#mobile').addClass('border-red-500');
+          isValid = false;
+        }
 
         const password = $('#password').val();
         if (password.length < 8) {
@@ -210,60 +191,37 @@
         $('#successAlert, #errorAlert').addClass('hidden');
 
         const formData = {
+          name: $('#name').val().trim(),
+          mobile: $('#mobile').val(),
           email: $('#email').val(),
-          password: $('#password').val() //assigen to otp
+          password: $('#password').val()
         };
     // console.log(formData);
     
+
         $.ajax({
-          url: '<?=base_url('auth')?>',
+          url: '<?=base_url('register')?>',
           type: 'POST',
         //   contentType: 'application/json',
           data: JSON.stringify(formData),
           success: function (response) {
             console.log(response);
             if (response == 0) {
-                $('#warningMessage').text('invalid credentials.');
+
+                $('#warningMessage').text('Account already exists.');
     $('#warningAlert').removeClass('hidden');
+    $('#userform')[0].reset();
     $('#submitBtn').removeClass('hidden');
     $('#submittingBtn').addClass('hidden');
-   
-}
- if (response == 1) {
+
+                //1   
+
+} else {
 
     $('#successAlert').removeClass('hidden');
+    $('#userform')[0].reset();
     $('#submitBtn').removeClass('hidden');
     $('#submittingBtn').addClass('hidden');
-    
-    Swal.fire({
-        title: "Success!",
-        text: "Your are login.",
-        icon: "success",
-        confirmButtonText: "OK"
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Redirect to home page after OK
-            window.location.href = "<?= base_url('user') ?>";
-        }
-    });
-}
- if (response == 2) {
-
-$('#successAlert').removeClass('hidden');
-$('#submitBtn').removeClass('hidden');
-$('#submittingBtn').addClass('hidden');
-
-Swal.fire({
-    title: "Success!",
-    text: "Your are login.",
-    icon: "success",
-    confirmButtonText: "OK"
-}).then((result) => {
-    if (result.isConfirmed) {
-        // Redirect to home page after OK
-        window.location.href = "<?= base_url('admin') ?>";
-    }
-});
 }
 
           },
@@ -279,7 +237,7 @@ Swal.fire({
 
       // Simulated response for demo/testing
     //   $.ajaxPrefilter(function (options) {
-    //     if (options.url === '<?=base_url('auth')?>') {
+    //     if (options.url === '<?=base_url('register')?>') {
     //       setTimeout(() => {
     //         if (Math.random() > 0.1) {
     //           options.success({ message: 'Registration successful!' }, 'success');
