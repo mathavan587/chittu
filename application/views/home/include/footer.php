@@ -32,6 +32,19 @@
           $whatsapp = $link->file_name;
           $whatsapp_link = $link->link;
 
+           $condition=array('categories'=>'email');
+          $link = $apimodel->getSingleData($condition,$select);
+          // $whatsapp = $link->file_name;
+          $email = $link->link;
+            $condition=array('categories'=>'phone');
+          $link = $apimodel->getSingleData($condition,$select);
+          // $whatsapp = $link->file_name;
+          $phone = $link->link;
+               $condition=array('categories'=>'address');
+          $link = $apimodel->getSingleData($condition,$select);
+          // $whatsapp = $link->file_name;
+          $address = $link->link;
+
  ?>
   <footer class="bg-gray-800 text-white py-12 px-4 sm:px-6 lg:px-8">
     <div class="container mx-auto max-w-7xl">
@@ -88,15 +101,15 @@
           <ul class="space-y-2">
             <li class="flex items-start">
               <i class="fas fa-envelope text-indigo-400 mt-1 mr-3"></i>
-              <span class="text-gray-400">support@chittupanel.com</span>
+              <span class="text-gray-400"><?=$email?></span>
             </li>
             <li class="flex items-start">
               <i class="fas fa-phone-alt text-indigo-400 mt-1 mr-3"></i>
-              <span class="text-gray-400">+1 (800) 123-4567</span>
+              <span class="text-gray-400"><?=$phone?></span>
             </li>
             <li class="flex items-start">
               <i class="fas fa-map-marker-alt text-indigo-400 mt-1 mr-3"></i>
-              <span class="text-gray-400">123 Social Media St, Digital City</span>
+              <span class="text-gray-400"><?=$address?></span>
             </li>
           </ul>
         </div>

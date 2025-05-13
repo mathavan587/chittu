@@ -52,7 +52,8 @@
 				// $this->load->view('registration',$data);
 			}
 			public function register()
-		{
+			{
+			log_message('debug',json_encode('register'));
 
 			$json = file_get_contents('php://input');
 			$data = json_decode($json, true);			
@@ -67,9 +68,11 @@
 				'is_deleted'=> false,
 				'created_at'=>date('Y-m-d H:i:s'),
 				'modified_at' =>date('Y-m-d H:i:s')	);
-			$apimodel = new Apimodel();
-			$apimodel->tablename = 'users';
-			$result = $apimodel->insertData($data);
+				
+				$apimodel = new Apimodel();
+				$apimodel->tablename = 'users';
+				$result = $apimodel->insertData($data);
+				// log_message('debug',json_encode($result));
 if ($result==0) {
  
 	echo json_encode($result);
@@ -84,7 +87,14 @@ public function sendmail($id=null){
 	$apimodel->tablename = 'users';
 	$getdata=$apimodel->getSingleData(array('id' => $id));
 	include('smtp/SMTP.php');
-	return email('mathavan202004@gmail.com','kzywvxlryddsuhoc','Chittu.in',$getdata->email,'Chittu.in','email id verification Chittu.in','email id verification code : '.$getdata->otp.'<br>'.'verification Url : '.base_url('verification'));
+          $apimodel->tablename = 'settings';
+          $condition=array('categories'=>'email-smtp');
+          $link = $apimodel->getSingleData($condition,$select);
+          $email = $link->link;
+		    $condition=array('categories'=>'password-smtp');
+          $link = $apimodel->getSingleData($condition,$select);
+          $password = $link->link;
+	return email($email,$password,'Chittu.in',$getdata->email,'Chittu.in','email id verification Chittu.in','email id verification code : '.$getdata->otp.'<br>'.'verification Url : '.base_url('verification'));
 }
 
 public function verification(){
@@ -114,11 +124,10 @@ public function verify(){
 	$apimodel->tablename = 'verification';
 	$result = $apimodel->insertData($data);
 	if($result==0){
-
+	
 		echo json_encode($result);
 
 	}else{
-			// log_message('debug',json_encode($data));
 		$apimodel = new Apimodel();
 		$apimodel->tablename = 'users';
 		$result=$apimodel->updateData($data, array('status' =>  0));		
@@ -194,6 +203,19 @@ public function services(){
 			$data=[
 		            'title'=>'Contact',
 					'include'=> 'contact',
+					// 'services'=>$services,
+				 ];
+				 
+				$this->load->view('home/include/header',$data);
+				$this->load->view('home/body');
+				$this->load->view('home/include/footer');
+			}
+
+				public function blog()
+			{	
+			$data=[
+		            'title'=>'Blog',
+					'include'=> 'blog',
 					// 'services'=>$services,
 				 ];
 				 

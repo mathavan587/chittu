@@ -132,8 +132,9 @@
           <ul class="flex items-center space-x-10 font-medium">
             <li><a href="<?=base_url('welcome')?>" class="nav-link active-link text-indigo-600 hover:text-indigo-800 transition">Home</a></li>
             <li><a href="<?=base_url('welcome/services')?>" class="nav-link text-gray-600 hover:text-indigo-600 transition">Services</a></li>
-            <li><a href="<?=base_url('welcome/about')?>" class="nav-link text-gray-600 hover:text-indigo-600 transition">About  </a></li>
+            <li><a href="<?=base_url('welcome/about')?>" class="nav-link text-gray-600 hover:text-indigo-600 transition">About  Us</a></li>
             <li><a href="<?=base_url('welcome/contact')?>" class="nav-link text-gray-600 hover:text-indigo-600 transition">Contact</a></li>
+            <li><a href="<?=base_url('welcome/blog')?>" class="nav-link text-gray-600 hover:text-indigo-600 transition">Blog</a></li>
             <li><a href="#faq" class="nav-link text-gray-600 hover:text-indigo-600 transition">FAQs</a></li>
             <li><a href="#api" class="nav-link text-gray-600 hover:text-indigo-600 transition">API</a></li>
           </ul>

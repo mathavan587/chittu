@@ -36,10 +36,8 @@ public function index() {
                 'include'=> 'blog/index',
                 'blogs'=> $blogs
             ];
-        // $this->load->view('admin/blog/index', $data);
                 $this->load->view('admin/include/header',$data);
 				$this->load->view('admin/body');
-                // print_r($data);
 				$this->load->view('admin/include/footer');
 
     }

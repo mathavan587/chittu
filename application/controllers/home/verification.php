@@ -1,3 +1,8 @@
+  
+  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <section class="py-12 bg-gray-50 min-h-screen flex justify-center items-center">
 
   <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-6 md:p-8">
